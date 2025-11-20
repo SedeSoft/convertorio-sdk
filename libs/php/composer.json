@@ -1,0 +1,50 @@
+{
+    "name": "convertorio/sdk",
+    "description": "Official Convertorio SDK for PHP - Convert images easily with a simple API",
+    "type": "library",
+    "keywords": [
+        "convertorio",
+        "image",
+        "conversion",
+        "converter",
+        "api",
+        "sdk",
+        "jpg",
+        "png",
+        "webp",
+        "avif",
+        "heic",
+        "image-converter",
+        "file-conversion"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Convertorio",
+            "email": "support@convertorio.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "ext-curl": "*",
+        "ext-json": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Convertorio\\SDK\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Convertorio\\SDK\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "homepage": "https://github.com/SedeSoft/convertorio-sdk",
+    "support": {
+        "issues": "https://github.com/SedeSoft/convertorio-sdk/issues",
+        "source": "https://github.com/SedeSoft/convertorio-sdk",
+        "docs": "https://github.com/SedeSoft/convertorio-sdk/tree/main/docs/php"
+    }
+}
