@@ -1,6 +1,7 @@
 # Dependencies
 node_modules/
 vendor/
+composer.lock
 __pycache__/
 *.pyc
 *.pyo
@@ -29,6 +30,11 @@ Thumbs.db
 *.test.js
 test-output/
 coverage/
+test-image.*
+output-*.jpg
+output-*.png
+output-*.webp
+output-*.ico
 
 # Logs
 *.log
