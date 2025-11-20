@@ -6,7 +6,7 @@
  * Basic conversion test without advanced metadata options.
  */
 
-require __DIR__ . '/../../../libs/php/vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
 use Convertorio\SDK\ConvertorioClient;
 

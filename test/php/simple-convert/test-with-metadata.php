@@ -6,7 +6,7 @@
  * Tests various conversion scenarios with metadata options.
  */
 
-require __DIR__ . '/../../../libs/php/vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
 use Convertorio\SDK\ConvertorioClient;
 
@@ -18,9 +18,11 @@ function runMetadataTests() {
     echo str_repeat('=', 60) . "\n";
 
     try {
+        // Set verifySsl to false for development/testing on Windows
         $client = new ConvertorioClient(
             API_KEY,
-            'https://api.convertorio.com'
+            'https://api.convertorio.com',
+            false  // Disable SSL verification for development
         );
 
         $inputPath = __DIR__ . '/test-image.png';

@@ -10,10 +10,14 @@ Test suite for the Convertorio PHP SDK.
 
 ## Installation
 
+From the test directory, install the SDK using Composer:
+
 ```bash
-cd sdk/libs/php
-composer install
+cd sdk/test/php/simple-convert
+composer require convertorio/sdk
 ```
+
+This will install the SDK from the local repository for testing.
 
 ## Running Tests
 
@@ -22,7 +26,7 @@ composer install
 Tests basic image conversion functionality:
 
 ```bash
-php sdk/test/php/simple-convert/simple-test.php
+php simple-test.php
 ```
 
 ### Resize Tests
@@ -30,7 +34,7 @@ php sdk/test/php/simple-convert/simple-test.php
 Tests various resize scenarios (6 tests):
 
 ```bash
-php sdk/test/php/simple-convert/test-resize.php
+php test-resize.php
 ```
 
 Tests included:
@@ -46,7 +50,7 @@ Tests included:
 Tests advanced conversion options (6 tests):
 
 ```bash
-php sdk/test/php/simple-convert/test-with-metadata.php
+php test-with-metadata.php
 ```
 
 Tests included:

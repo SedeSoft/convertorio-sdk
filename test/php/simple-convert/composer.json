@@ -1,0 +1,22 @@
+{
+    "name": "convertorio/test",
+    "description": "Test for Convertorio SDK",
+    "require": {
+        "php": ">=7.4",
+        "convertorio/sdk": "dev-main"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../../../",
+            "options": {
+                "symlink": false
+            }
+        },
+        {
+            "packagist.org": false
+        }
+    ]
+}
