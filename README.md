@@ -19,7 +19,7 @@ Official SDKs for the Convertorio API - Convert images between 20+ formats with 
 | **Node.js** | ✅ Available | [docs/nodejs](./docs/nodejs/README.md) | `convertorio-sdk` |
 | **Python** | ✅ Available | [docs/python](./docs/python/README.md) | `convertorio-sdk` |
 | **PHP** | ✅ Available | [README-PHP.md](./README-PHP.md) | `convertorio/sdk` |
-| Go | 🚧 Coming Soon | - | - |
+| **Go** | ✅ Available | [docs/go](./docs/go/README.md) | `github.com/SedeSoft/convertorio-sdk/libs/go` |
 | Ruby | 🚧 Coming Soon | - | - |
 | Java | 🚧 Coming Soon | - | - |
 | .NET/C# | 🚧 Coming Soon | - | - |
@@ -95,6 +95,41 @@ echo "Converted! {$result['output_path']}";
 
 [**→ Full PHP Documentation**](./README-PHP.md)
 
+### Go
+
+```bash
+go get github.com/SedeSoft/convertorio-sdk/libs/go@v1.2.0
+```
+
+```go
+package main
+
+import (
+    "fmt"
+    "log"
+    convertorio "github.com/SedeSoft/convertorio-sdk/libs/go"
+)
+
+func main() {
+    client := convertorio.NewClient(convertorio.ClientConfig{
+        APIKey: "your_api_key_here",
+    })
+
+    result, err := client.ConvertFile(convertorio.ConvertFileOptions{
+        InputPath:    "./image.png",
+        TargetFormat: "jpg",
+    })
+
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    fmt.Printf("Converted! %s\n", result.OutputPath)
+}
+```
+
+[**→ Full Go Documentation**](./docs/go/README.md)
+
 ## 📖 Language-Specific Documentation
 
 ### Node.js (JavaScript/TypeScript)
@@ -161,9 +196,31 @@ composer require convertorio/sdk
 
 ---
 
+### Go
+
+The Go SDK provides a type-safe, idiomatic Go API with event callbacks for tracking conversion progress.
+
+**Installation:**
+```bash
+go get github.com/SedeSoft/convertorio-sdk/libs/go@v1.2.0
+```
+
+**Features:**
+- Type-safe API with structs
+- Event callbacks for progress tracking
+- No external dependencies (standard library only)
+- Automatic file handling
+- Supports Go 1.18+
+
+**[→ View Go Documentation](./docs/go/README.md)**
+
+**[→ View Go Examples](./examples/go/)**
+
+---
+
 ### Other Languages
 
-We're working on SDKs for Go, Ruby, Java, and .NET.
+We're working on SDKs for Ruby, Java, and .NET.
 
 Want to see support for another language? [Open an issue](https://github.com/convertorio/sdk/issues) or contribute!
 
@@ -225,19 +282,23 @@ sdk/
 ├── libs/              # SDK implementations
 │   ├── nodejs/        # Node.js SDK
 │   ├── python/        # Python SDK
-│   └── php/           # PHP SDK
+│   ├── php/           # PHP SDK
+│   └── go/            # Go SDK
 ├── examples/          # Usage examples
 │   ├── nodejs/        # Node.js examples
 │   ├── python/        # Python examples
-│   └── php/           # PHP examples
+│   ├── php/           # PHP examples
+│   └── go/            # Go examples
 ├── test/              # Test suites
 │   ├── nodejs/        # Node.js tests
 │   ├── python/        # Python tests
-│   └── php/           # PHP tests
+│   ├── php/           # PHP tests
+│   └── go/            # Go tests
 ├── docs/              # Documentation
 │   ├── nodejs/        # Node.js documentation
 │   ├── python/        # Python documentation
-│   └── php/           # PHP documentation
+│   ├── php/           # PHP documentation
+│   └── go/            # Go documentation
 ├── composer.json      # PHP package config (root level)
 ├── examples.php       # PHP examples (root level)
 ├── README.md          # This file
@@ -265,6 +326,10 @@ python basic_conversion.py
 
 # PHP examples
 php examples.php
+
+# Go examples
+cd examples/go
+go run examples.go
 ```
 
 ### Testing
@@ -285,6 +350,10 @@ cd test/php/simple-convert
 php simple-test.php
 php test-resize.php
 php test-with-metadata.php
+
+# Go
+cd test/go/simple-convert
+go run main.go
 ```
 
 ## 📚 Resources
