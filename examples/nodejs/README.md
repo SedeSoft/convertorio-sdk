@@ -98,7 +98,7 @@ node account-info.js
 ### Converting a Single File
 
 ```javascript
-const ConvertorioClient = require('@convertorio/sdk');
+const ConvertorioClient = require('convertorio-sdk');
 
 const client = new ConvertorioClient({
     apiKey: 'your_api_key_here'

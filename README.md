@@ -16,7 +16,7 @@ Official SDKs for the Convertorio API - Convert images between 20+ formats with 
 
 | Language | Status | Documentation | Package |
 |----------|--------|---------------|---------|
-| **Node.js** | ✅ Available | [docs/nodejs](./docs/nodejs/README.md) | `@convertorio/sdk` |
+| **Node.js** | ✅ Available | [docs/nodejs](./docs/nodejs/README.md) | `convertorio-sdk` |
 | Python | 🚧 Coming Soon | - | - |
 | PHP | 🚧 Coming Soon | - | - |
 | Go | 🚧 Coming Soon | - | - |
@@ -29,11 +29,11 @@ Official SDKs for the Convertorio API - Convert images between 20+ formats with 
 ### Node.js
 
 ```bash
-npm install @convertorio/sdk
+npm install convertorio-sdk
 ```
 
 ```javascript
-const ConvertorioClient = require('@convertorio/sdk');
+const ConvertorioClient = require('convertorio-sdk');
 
 const client = new ConvertorioClient({
     apiKey: 'your_api_key_here'
@@ -57,7 +57,7 @@ The Node.js SDK provides a simple, promise-based API with event support for trac
 
 **Installation:**
 ```bash
-npm install @convertorio/sdk
+npm install convertorio-sdk
 ```
 
 **Features:**

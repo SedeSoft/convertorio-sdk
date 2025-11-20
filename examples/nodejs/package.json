@@ -10,6 +10,6 @@
     "account": "node account-info.js"
   },
   "dependencies": {
-    "@convertorio/sdk": "file:../../libs/nodejs"
+    "convertorio-sdk": "file:../../libs/nodejs"
   }
 }

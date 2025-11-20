@@ -1,0 +1,19 @@
+# Test files
+*.test.js
+test/
+tests/
+
+# Development files
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

@@ -1,0 +1,13 @@
+{
+  "name": "convertorio-sdk-test",
+  "version": "1.0.0",
+  "description": "Test for Convertorio SDK from npm",
+  "private": true,
+  "scripts": {
+    "test": "node test.js",
+    "simple": "node simple-test.js"
+  },
+  "dependencies": {
+    "convertorio-sdk": "^1.0.1"
+  }
+}
