@@ -235,8 +235,16 @@ func (c *Client) ConvertFile(options ConvertFileOptions) (*ConvertFileResult, er
 
 // requestUploadURL requests an upload URL from the API
 func (c *Client) requestUploadURL(fileName, targetFormat string, metadata map[string]interface{}) (*UploadURLResponse, error) {
+	// Get source format from file extension
+	ext := filepath.Ext(fileName)
+	sourceFormat := ""
+	if len(ext) > 0 && ext[0] == '.' {
+		sourceFormat = ext[1:] // Remove the dot
+	}
+
 	reqBody := map[string]interface{}{
-		"file_name":     fileName,
+		"filename":      fileName,
+		"source_format": sourceFormat,
 		"target_format": targetFormat,
 	}
 
@@ -249,7 +257,8 @@ func (c *Client) requestUploadURL(fileName, targetFormat string, metadata map[st
 		return nil, fmt.Errorf("failed to marshal request: %w", err)
 	}
 
-	req, err := http.NewRequest("POST", c.baseURL+"/api/upload/request-url", bytes.NewBuffer(body))
+	url := c.baseURL + "/v1/convert/upload-url"
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(body))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
@@ -268,8 +277,9 @@ func (c *Client) requestUploadURL(fileName, targetFormat string, metadata map[st
 		return nil, fmt.Errorf("API error (status %d): %s", resp.StatusCode, string(bodyBytes))
 	}
 
+	bodyBytes, _ := io.ReadAll(resp.Body)
 	var result UploadURLResponse
-	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
+	if err := json.Unmarshal(bodyBytes, &result); err != nil {
 		return nil, fmt.Errorf("failed to decode response: %w", err)
 	}
 
@@ -278,26 +288,28 @@ func (c *Client) requestUploadURL(fileName, targetFormat string, metadata map[st
 
 // uploadToS3 uploads a file to S3
 func (c *Client) uploadToS3(uploadURL, filePath string) error {
-	file, err := os.Open(filePath)
+	// Read file content
+	fileData, err := os.ReadFile(filePath)
 	if err != nil {
-		return fmt.Errorf("failed to open file: %w", err)
-	}
-	defer file.Close()
-
-	// Get file info to set content length
-	fileInfo, err := file.Stat()
-	if err != nil {
-		return fmt.Errorf("failed to stat file: %w", err)
+		return fmt.Errorf("failed to read file: %w", err)
 	}
 
-	req, err := http.NewRequest("PUT", uploadURL, file)
+	// Detect source format from file extension
+	ext := filepath.Ext(filePath)
+	if len(ext) > 0 && ext[0] == '.' {
+		ext = ext[1:] // Remove the dot
+	}
+
+	// Create request with file data
+	req, err := http.NewRequest("PUT", uploadURL, bytes.NewReader(fileData))
 	if err != nil {
 		return fmt.Errorf("failed to create upload request: %w", err)
 	}
 
-	// Set appropriate headers for S3
-	req.Header.Set("Content-Type", "application/octet-stream")
-	req.ContentLength = fileInfo.Size()
+	// Set appropriate headers for S3 - use image/format like other SDKs
+	contentType := fmt.Sprintf("image/%s", ext)
+	req.Header.Set("Content-Type", contentType)
+	req.ContentLength = int64(len(fileData))
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
@@ -324,7 +336,7 @@ func (c *Client) confirmUpload(jobID string) error {
 		return fmt.Errorf("failed to marshal request: %w", err)
 	}
 
-	req, err := http.NewRequest("POST", c.baseURL+"/api/upload/confirm", bytes.NewBuffer(body))
+	req, err := http.NewRequest("POST", c.baseURL+"/v1/convert/confirm", bytes.NewBuffer(body))
 	if err != nil {
 		return fmt.Errorf("failed to create request: %w", err)
 	}
@@ -407,7 +419,7 @@ func (c *Client) downloadFile(url, destPath string) error {
 
 // GetAccount retrieves account information
 func (c *Client) GetAccount() (*Account, error) {
-	req, err := http.NewRequest("GET", c.baseURL+"/api/account", nil)
+	req, err := http.NewRequest("GET", c.baseURL+"/v1/account", nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
@@ -435,7 +447,7 @@ func (c *Client) GetAccount() (*Account, error) {
 
 // ListJobs retrieves a list of conversion jobs
 func (c *Client) ListJobs(limit, offset int, status string) ([]*Job, error) {
-	url := fmt.Sprintf("%s/api/jobs?limit=%d&offset=%d", c.baseURL, limit, offset)
+	url := fmt.Sprintf("%s/v1/jobs?limit=%d&offset=%d", c.baseURL, limit, offset)
 	if status != "" {
 		url += "&status=" + status
 	}
@@ -468,7 +480,7 @@ func (c *Client) ListJobs(limit, offset int, status string) ([]*Job, error) {
 
 // GetJob retrieves details for a specific job
 func (c *Client) GetJob(jobID string) (*Job, error) {
-	req, err := http.NewRequest("GET", c.baseURL+"/api/jobs/"+jobID, nil)
+	req, err := http.NewRequest("GET", c.baseURL+"/v1/jobs/"+jobID, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
@@ -486,10 +498,11 @@ func (c *Client) GetJob(jobID string) (*Job, error) {
 		return nil, fmt.Errorf("API error (status %d): %s", resp.StatusCode, string(bodyBytes))
 	}
 
-	var job Job
-	if err := json.NewDecoder(resp.Body).Decode(&job); err != nil {
+	bodyBytes, _ := io.ReadAll(resp.Body)
+	var jobResp JobResponse
+	if err := json.Unmarshal(bodyBytes, &jobResp); err != nil {
 		return nil, fmt.Errorf("failed to decode response: %w", err)
 	}
 
-	return &job, nil
+	return &jobResp.Job, nil
 }

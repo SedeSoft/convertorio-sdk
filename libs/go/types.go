@@ -21,6 +21,12 @@ type Job struct {
 	Metadata         map[string]interface{} `json:"metadata,omitempty"`
 }
 
+// JobResponse represents the API response wrapper for a job
+type JobResponse struct {
+	Success bool `json:"success"`
+	Job     Job  `json:"job"`
+}
+
 // Account represents a user account
 type Account struct {
 	ID                       string `json:"id"`
