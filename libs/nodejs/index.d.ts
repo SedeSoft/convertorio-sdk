@@ -5,10 +5,20 @@ export interface ConvertorioConfig {
     baseUrl?: string;
 }
 
+export interface ConversionMetadata {
+    aspect_ratio?: string;
+    crop_strategy?: 'fit' | 'crop-center' | 'crop-top' | 'crop-bottom' | 'crop-left' | 'crop-right';
+    quality?: number;
+    icon_size?: 16 | 32 | 48 | 64 | 128 | 256;
+    resize_width?: number;
+    resize_height?: number;
+}
+
 export interface ConversionOptions {
     inputPath: string;
     targetFormat: string;
     outputPath?: string;
+    conversionMetadata?: ConversionMetadata;
 }
 
 export interface ConversionResult {

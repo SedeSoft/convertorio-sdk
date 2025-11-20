@@ -40,10 +40,15 @@ class ConvertorioClient extends EventEmitter {
      * @param {string} options.inputPath - Path to the input file
      * @param {string} options.targetFormat - Target format (jpg, png, webp, avif, etc.)
      * @param {string} [options.outputPath] - Optional output path (auto-generated if not provided)
+     * @param {Object} [options.conversionMetadata] - Advanced conversion options
+     * @param {string} [options.conversionMetadata.aspect_ratio] - Target aspect ratio (original, 1:1, 4:3, 16:9, 9:16, 21:9, custom)
+     * @param {string} [options.conversionMetadata.crop_strategy] - Crop strategy (fit, crop-center, crop-top, crop-bottom, crop-left, crop-right)
+     * @param {number} [options.conversionMetadata.quality] - Compression quality 1-100 (for JPG, WebP, AVIF)
+     * @param {number} [options.conversionMetadata.icon_size] - Icon size in pixels (for ICO format: 16, 32, 48, 64, 128, 256)
      * @returns {Promise<Object>} Conversion result with download URL and file path
      */
     async convertFile(options) {
-        const { inputPath, targetFormat, outputPath } = options;
+        const { inputPath, targetFormat, outputPath, conversionMetadata } = options;
 
         if (!inputPath) {
             throw new Error('inputPath is required');
@@ -71,12 +76,19 @@ class ConvertorioClient extends EventEmitter {
                 message: 'Requesting upload URL from server...'
             });
 
-            const uploadRequest = await this.client.post('/v1/convert/upload-url', {
+            const requestBody = {
                 filename: fileName,
                 source_format: sourceFormat,
                 target_format: targetFormat.toLowerCase(),
                 file_size: fileStats.size
-            });
+            };
+
+            // Add conversion metadata if provided
+            if (conversionMetadata && Object.keys(conversionMetadata).length > 0) {
+                requestBody.conversion_metadata = conversionMetadata;
+            }
+
+            const uploadRequest = await this.client.post('/v1/convert/upload-url', requestBody);
 
             if (!uploadRequest.data.success) {
                 throw new Error(uploadRequest.data.error || 'Failed to get upload URL');

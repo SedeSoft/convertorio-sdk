@@ -73,6 +73,7 @@ Convert an image file from one format to another.
 - `options.inputPath` (string, required): Path to the input image file
 - `options.targetFormat` (string, required): Target format (jpg, png, webp, avif, gif, bmp, tiff, ico, heic, etc.)
 - `options.outputPath` (string, optional): Custom output path. If not provided, uses the same directory as input with new extension
+- `options.conversionMetadata` (object, optional): Advanced conversion options (see Advanced Options section below)
 
 **Returns:** Promise<ConversionResult>
 
@@ -269,6 +270,139 @@ The SDK supports conversion between all formats supported by Convertorio:
 - AI (Adobe Illustrator)
 - EPS
 - JXL (JPEG XL)
+
+## Advanced Conversion Options
+
+You can control various aspects of the conversion process by passing a `conversionMetadata` object:
+
+### Aspect Ratio Control
+
+Change the aspect ratio of the output image:
+
+```javascript
+await client.convertFile({
+    inputPath: './photo.jpg',
+    targetFormat: 'png',
+    conversionMetadata: {
+        aspect_ratio: '16:9',        // Target aspect ratio
+        crop_strategy: 'crop-center'  // How to handle the change
+    }
+});
+```
+
+**Available aspect ratios:**
+- `'original'` - Keep original aspect ratio (default)
+- `'1:1'` - Square (Instagram, profile photos)
+- `'4:3'` - Standard photo/video
+- `'16:9'` - Widescreen video, HD
+- `'9:16'` - Vertical/portrait video (TikTok, Stories)
+- `'21:9'` - Ultra-widescreen
+- Custom ratios like `'16:10'`, `'3:2'`, etc.
+
+**Crop strategies:**
+- `'fit'` - Contain image with padding (letterbox/pillarbox)
+- `'crop-center'` - Crop from center
+- `'crop-top'` - Crop aligned to top
+- `'crop-bottom'` - Crop aligned to bottom
+- `'crop-left'` - Crop aligned to left
+- `'crop-right'` - Crop aligned to right
+
+### Quality Control
+
+Adjust compression quality for lossy formats (JPG, WebP, AVIF):
+
+```javascript
+await client.convertFile({
+    inputPath: './photo.png',
+    targetFormat: 'jpg',
+    conversionMetadata: {
+        quality: 90  // 1-100, default is 85
+    }
+});
+```
+
+**Quality guidelines:**
+- `90-100` - Excellent quality, large files
+- `80-90` - High quality, good balance (recommended)
+- `70-80` - Good quality, smaller files
+- `50-70` - Medium quality, small files
+- `1-50` - Low quality, very small files
+
+### ICO Format Options
+
+When converting to ICO format, specify the icon size:
+
+```javascript
+await client.convertFile({
+    inputPath: './logo.png',
+    targetFormat: 'ico',
+    conversionMetadata: {
+        icon_size: 32,              // 16, 32, 48, 64, 128, or 256
+        crop_strategy: 'crop-center' // How to make it square
+    }
+});
+```
+
+**Available icon sizes:** 16, 32, 48, 64, 128, 256 pixels
+
+### Resize Control
+
+Resize images to specific dimensions while maintaining aspect ratio:
+
+```javascript
+// Resize by width (height calculated automatically)
+await client.convertFile({
+    inputPath: './photo.jpg',
+    targetFormat: 'jpg',
+    conversionMetadata: {
+        resize_width: 800  // Height will be calculated to maintain aspect ratio
+    }
+});
+
+// Resize by height (width calculated automatically)
+await client.convertFile({
+    inputPath: './photo.jpg',
+    targetFormat: 'jpg',
+    conversionMetadata: {
+        resize_height: 600  // Width will be calculated to maintain aspect ratio
+    }
+});
+
+// Resize to exact dimensions (may distort image)
+await client.convertFile({
+    inputPath: './photo.jpg',
+    targetFormat: 'jpg',
+    conversionMetadata: {
+        resize_width: 800,
+        resize_height: 600  // Forces exact dimensions
+    }
+});
+```
+
+**Resize guidelines:**
+- Specify only `resize_width` to scale by width (maintains aspect ratio)
+- Specify only `resize_height` to scale by height (maintains aspect ratio)
+- Specify both to force exact dimensions (may distort if ratios don't match)
+- Range: 1-10000 pixels
+- Can be combined with aspect ratio and crop strategy for advanced control
+
+### Complete Example
+
+```javascript
+const result = await client.convertFile({
+    inputPath: './photo.jpg',
+    targetFormat: 'webp',
+    outputPath: './output/photo-optimized.webp',
+    conversionMetadata: {
+        aspect_ratio: '16:9',
+        crop_strategy: 'crop-center',
+        quality: 85,
+        resize_width: 1920  // Final width after aspect ratio change
+    }
+});
+
+console.log('Converted with custom options!', result);
+```
 
 ## Examples
 
