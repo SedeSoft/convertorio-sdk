@@ -1,0 +1,15 @@
+{
+  "name": "convertorio-sdk-examples",
+  "version": "1.0.0",
+  "description": "Examples for using the Convertorio SDK",
+  "private": true,
+  "scripts": {
+    "basic": "node basic-conversion.js",
+    "events": "node with-events.js",
+    "batch": "node batch-conversion.js",
+    "account": "node account-info.js"
+  },
+  "dependencies": {
+    "@convertorio/sdk": "file:../../libs/nodejs"
+  }
+}

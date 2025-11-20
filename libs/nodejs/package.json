@@ -1,0 +1,39 @@
+{
+  "name": "@convertorio/sdk",
+  "version": "1.0.0",
+  "description": "Official Convertorio SDK for Node.js - Convert images easily with a simple API",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "keywords": [
+    "convertorio",
+    "image",
+    "conversion",
+    "converter",
+    "api",
+    "sdk",
+    "jpg",
+    "png",
+    "webp",
+    "avif"
+  ],
+  "author": "Convertorio",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/convertorio/sdk"
+  },
+  "bugs": {
+    "url": "https://github.com/convertorio/sdk/issues"
+  },
+  "homepage": "https://convertorio.com/docs/sdk",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "form-data": "^4.0.0"
+  }
+}
