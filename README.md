@@ -17,7 +17,7 @@ Official SDKs for the Convertorio API - Convert images between 20+ formats with 
 | Language | Status | Documentation | Package |
 |----------|--------|---------------|---------|
 | **Node.js** | ✅ Available | [docs/nodejs](./docs/nodejs/README.md) | `convertorio-sdk` |
-| Python | 🚧 Coming Soon | - | - |
+| **Python** | ✅ Available | [docs/python](./docs/python/README.md) | `convertorio-sdk` |
 | PHP | 🚧 Coming Soon | - | - |
 | Go | 🚧 Coming Soon | - | - |
 | Ruby | 🚧 Coming Soon | - | - |
@@ -49,6 +49,27 @@ console.log('Converted!', result.outputPath);
 
 [**→ Full Node.js Documentation**](./docs/nodejs/README.md)
 
+### Python
+
+```bash
+pip install convertorio-sdk
+```
+
+```python
+from convertorio_sdk import ConvertorioClient
+
+client = ConvertorioClient(api_key='your_api_key_here')
+
+result = client.convert_file(
+    input_path='./image.png',
+    target_format='jpg'
+)
+
+print(f"Converted! {result['output_path']}")
+```
+
+[**→ Full Python Documentation**](./docs/python/README.md)
+
 ## 📖 Language-Specific Documentation
 
 ### Node.js (JavaScript/TypeScript)
@@ -72,15 +93,24 @@ npm install convertorio-sdk
 
 ---
 
-### Python (Coming Soon)
+### Python
 
-Python SDK with support for sync and async operations.
+The Python SDK provides an intuitive API with event callbacks for tracking conversion progress.
 
-**Planned Features:**
-- Both sync and async APIs
-- Context managers for resource handling
+**Installation:**
+```bash
+pip install convertorio-sdk
+```
+
+**Features:**
+- Simple, synchronous API
+- Event callbacks for progress tracking
 - Type hints for IDE support
-- Pandas integration for batch processing
+- Automatic file handling
+
+**[→ View Python Documentation](./docs/python/README.md)**
+
+**[→ View Python Examples](./examples/python/)**
 
 ---
 
@@ -157,15 +187,15 @@ Convert between 20+ image formats:
 sdk/
 ├── libs/              # SDK implementations
 │   ├── nodejs/        # Node.js SDK
-│   ├── python/        # Python SDK (coming soon)
+│   ├── python/        # Python SDK
 │   └── php/           # PHP SDK (coming soon)
 ├── examples/          # Usage examples
 │   ├── nodejs/        # Node.js examples
-│   ├── python/        # Python examples (coming soon)
+│   ├── python/        # Python examples
 │   └── php/           # PHP examples (coming soon)
 ├── docs/              # Documentation
 │   ├── nodejs/        # Node.js documentation
-│   ├── python/        # Python documentation (coming soon)
+│   ├── python/        # Python documentation
 │   └── php/           # PHP documentation (coming soon)
 └── README.md          # This file
 ```
@@ -185,7 +215,7 @@ Navigate to the examples directory for your language:
 cd examples/nodejs
 node basic-conversion.js
 
-# Python examples (coming soon)
+# Python examples
 cd examples/python
 python basic_conversion.py
 ```
@@ -197,9 +227,11 @@ python basic_conversion.py
 cd libs/nodejs
 npm test
 
-# Python (coming soon)
-cd libs/python
-pytest
+# Python
+cd test/python/simple-convert
+python simple-test.py
+python test-resize.py
+python test-with-metadata.py
 
 # PHP (coming soon)
 cd libs/php
