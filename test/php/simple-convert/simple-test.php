@@ -16,9 +16,11 @@ function runTest() {
     echo "Iniciando conversión...\n";
 
     try {
+        // Set verifySsl to false for development/testing on Windows
         $client = new ConvertorioClient(
             API_KEY,
-            'https://api.convertorio.com'
+            'https://api.convertorio.com',
+            false  // Disable SSL verification for development
         );
 
         $result = $client->convertFile(

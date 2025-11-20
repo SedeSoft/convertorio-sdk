@@ -30,13 +30,19 @@ class ConvertorioClient
     private $eventCallbacks = [];
 
     /**
+     * @var bool Verify SSL certificates
+     */
+    private $verifySsl = true;
+
+    /**
      * Create a new Convertorio client
      *
      * @param string $apiKey Your Convertorio API key
      * @param string|null $baseUrl Optional custom API base URL
+     * @param bool $verifySsl Verify SSL certificates (set to false for development)
      * @throws Exception If API key is not provided
      */
-    public function __construct(string $apiKey, ?string $baseUrl = null)
+    public function __construct(string $apiKey, ?string $baseUrl = null, bool $verifySsl = true)
     {
         if (empty($apiKey)) {
             throw new Exception('API key is required. Get yours at https://convertorio.com/account');
@@ -44,6 +50,7 @@ class ConvertorioClient
 
         $this->apiKey = $apiKey;
         $this->baseUrl = $baseUrl ?? 'https://api.convertorio.com';
+        $this->verifySsl = $verifySsl;
     }
 
     /**
@@ -275,7 +282,29 @@ class ConvertorioClient
      */
     private function downloadFile(string $url, string $outputPath): void
     {
-        $fileData = file_get_contents($url);
+        // Use cURL for better SSL control
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+
+        // SSL verification settings
+        if (!$this->verifySsl) {
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        }
+
+        $fileData = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $error = curl_error($ch);
+        curl_close($ch);
+
+        if ($error) {
+            throw new Exception("Download failed: {$error}");
+        }
+
+        if ($httpCode < 200 || $httpCode >= 300) {
+            throw new Exception("Failed to download file. HTTP Status: {$httpCode}");
+        }
 
         if ($fileData === false) {
             throw new Exception("Failed to download file from: {$url}");
@@ -311,9 +340,20 @@ class ConvertorioClient
             'Content-Length: ' . strlen($fileData)
         ]);
 
+        // SSL verification settings
+        if (!$this->verifySsl) {
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        }
+
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $error = curl_error($ch);
         curl_close($ch);
+
+        if ($error) {
+            throw new Exception("Upload failed: {$error}");
+        }
 
         if ($httpCode < 200 || $httpCode >= 300) {
             throw new Exception("Failed to upload file. HTTP Status: {$httpCode}");
@@ -355,6 +395,12 @@ class ConvertorioClient
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        // SSL verification settings
+        if (!$this->verifySsl) {
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        }
 
         if ($method === 'POST') {
             curl_setopt($ch, CURLOPT_POST, true);
