@@ -1,30 +1,80 @@
-# Convertorio SDK for PHP
+# Convertorio SDK
 
-Official PHP SDK for the Convertorio API. Convert images between 20+ formats with just a few lines of code.
+Official SDKs for the Convertorio API - Convert images between 20+ formats with ease.
 
-## Features
+## 🌟 Features
 
-- ✅ Simple, intuitive API
-- ✅ Event-driven progress tracking
-- ✅ Automatic file upload and download
+- ✅ Simple, intuitive APIs
 - ✅ Support for 20+ image formats
-- ✅ PSR-4 autoloading
-- ✅ Batch conversion support
-- ✅ Full error handling
+- ✅ Automatic file upload and download
+- ✅ Event-driven progress tracking
+- ✅ Comprehensive error handling
+- ✅ TypeScript support
+- ✅ Well documented with examples
 
-## Requirements
+## 📦 Supported Languages
 
-- PHP >= 7.4
-- cURL extension
-- JSON extension
+| Language | Status | Documentation | Package |
+|----------|--------|---------------|---------|
+| **Node.js** | ✅ Available | [docs/nodejs](./docs/nodejs/README.md) | `convertorio-sdk` |
+| **Python** | ✅ Available | [docs/python](./docs/python/README.md) | `convertorio-sdk` |
+| **PHP** | ✅ Available | [README-PHP.md](./README-PHP.md) | `convertorio/sdk` |
+| Go | 🚧 Coming Soon | - | - |
+| Ruby | 🚧 Coming Soon | - | - |
+| Java | 🚧 Coming Soon | - | - |
+| .NET/C# | 🚧 Coming Soon | - | - |
 
-## Installation
+## 🚀 Quick Start
+
+### Node.js
+
+```bash
+npm install convertorio-sdk
+```
+
+```javascript
+const ConvertorioClient = require('convertorio-sdk');
+
+const client = new ConvertorioClient({
+    apiKey: 'your_api_key_here'
+});
+
+const result = await client.convertFile({
+    inputPath: './image.png',
+    targetFormat: 'jpg'
+});
+
+console.log('Converted!', result.outputPath);
+```
+
+[**→ Full Node.js Documentation**](./docs/nodejs/README.md)
+
+### Python
+
+```bash
+pip install convertorio-sdk
+```
+
+```python
+from convertorio_sdk import ConvertorioClient
+
+client = ConvertorioClient(api_key='your_api_key_here')
+
+result = client.convert_file(
+    input_path='./image.png',
+    target_format='jpg'
+)
+
+print(f"Converted! {result['output_path']}")
+```
+
+[**→ Full Python Documentation**](./docs/python/README.md)
+
+### PHP
 
 ```bash
 composer require convertorio/sdk
 ```
-
-## Quick Start
 
 ```php
 <?php
@@ -33,225 +83,109 @@ require 'vendor/autoload.php';
 
 use Convertorio\SDK\ConvertorioClient;
 
-// Initialize the client
 $client = new ConvertorioClient('your_api_key_here');
 
-// Convert an image
 $result = $client->convertFile(
     './image.png',
     'jpg'
 );
 
-echo "Converted! " . $result['output_path'];
+echo "Converted! {$result['output_path']}";
 ```
 
-## Configuration
+[**→ Full PHP Documentation**](./README-PHP.md)
 
-### Creating a Client
+## 📖 Language-Specific Documentation
 
-```php
-use Convertorio\SDK\ConvertorioClient;
+### Node.js (JavaScript/TypeScript)
 
-$client = new ConvertorioClient(
-    'your_api_key_here',           // Required: Your API key
-    'https://api.convertorio.com'  // Optional: Custom API URL
-);
+The Node.js SDK provides a simple, promise-based API with event support for tracking conversion progress.
+
+**Installation:**
+```bash
+npm install convertorio-sdk
 ```
 
-**Getting your API Key:**
+**Features:**
+- Promise-based async/await API
+- Event emitters for progress tracking
+- TypeScript definitions included
+- Automatic file handling
+
+**[→ View Node.js Documentation](./docs/nodejs/README.md)**
+
+**[→ View Node.js Examples](./examples/nodejs/)**
+
+---
+
+### Python
+
+The Python SDK provides an intuitive API with event callbacks for tracking conversion progress.
+
+**Installation:**
+```bash
+pip install convertorio-sdk
+```
+
+**Features:**
+- Simple, synchronous API
+- Event callbacks for progress tracking
+- Type hints for IDE support
+- Automatic file handling
+
+**[→ View Python Documentation](./docs/python/README.md)**
+
+**[→ View Python Examples](./examples/python/)**
+
+---
+
+### PHP
+
+The PHP SDK provides a clean, PSR-4 compliant API with event callbacks for tracking conversion progress.
+
+**Installation:**
+```bash
+composer require convertorio/sdk
+```
+
+**Features:**
+- PSR-4 autoloading
+- Event callbacks for progress tracking
+- Compatible with modern PHP frameworks
+- Automatic file handling
+- Supports PHP 7.4+
+
+**[→ View PHP Documentation](./README-PHP.md)**
+
+**[→ View PHP Examples](./examples.php)**
+
+---
+
+### Other Languages
+
+We're working on SDKs for Go, Ruby, Java, and .NET.
+
+Want to see support for another language? [Open an issue](https://github.com/convertorio/sdk/issues) or contribute!
+
+## 🔑 Getting Started
+
+### 1. Get Your API Key
+
 1. Sign up at [convertorio.com](https://convertorio.com)
 2. Go to your [Account Settings](https://convertorio.com/account)
 3. Generate an API key
 
-## API Reference
+### 2. Install the SDK
 
-### `convertFile()`
+Choose your preferred language and follow the installation instructions in the language-specific documentation.
 
-Convert an image file from one format to another.
+### 3. Start Converting
 
-**Parameters:**
-- `$inputPath` (string, required): Path to the input image file
-- `$targetFormat` (string, required): Target format (jpg, png, webp, avif, gif, bmp, tiff, ico, heic, etc.)
-- `$outputPath` (string, optional): Custom output path. If not provided, uses the same directory as input with new extension
-- `$conversionMetadata` (array, optional): Advanced conversion options (see Advanced Options section below)
+Check out the examples in the `examples/` directory for your chosen language.
 
-**Returns:** array
+## 🎯 Supported Formats
 
-**Example:**
-
-```php
-$result = $client->convertFile(
-    './photo.png',
-    'webp',
-    './converted/photo.webp'
-);
-
-print_r($result);
-// Array
-// (
-//     [success] => true
-//     [job_id] => abc-123-def
-//     [input_path] => ./photo.png
-//     [output_path] => ./converted/photo.webp
-//     [source_format] => png
-//     [target_format] => webp
-//     [file_size] => 45620
-//     [processing_time] => 1250
-//     [download_url] => https://...
-// )
-```
-
-### `getAccount()`
-
-Get account information including points balance and usage.
-
-**Returns:** array
-
-**Example:**
-
-```php
-$account = $client->getAccount();
-
-print_r($account);
-// Array
-// (
-//     [id] => user-123
-//     [email] => user@example.com
-//     [name] => John Doe
-//     [plan] => free
-//     [points] => 100
-//     [daily_conversions_remaining] => 5
-//     [total_conversions] => 42
-// )
-```
-
-### `listJobs()`
-
-List your conversion jobs with optional filtering.
-
-**Parameters:**
-- `$limit` (int, optional): Number of jobs to return (default: 50, max: 100)
-- `$offset` (int, optional): Offset for pagination (default: 0)
-- `$status` (string, optional): Filter by status ('completed', 'failed', 'processing', etc.)
-
-**Returns:** array
-
-**Example:**
-
-```php
-$jobs = $client->listJobs(10, 0, 'completed');
-
-print_r($jobs);
-// Array
-// (
-//     [0] => Array
-//         (
-//             [id] => job-123
-//             [status] => completed
-//             [original_filename] => photo.png
-//             [source_format] => png
-//             [target_format] => jpg
-//             [processing_time_ms] => 1200
-//             [created_at] => 2025-01-20T10:30:00Z
-//         )
-//     ...
-// )
-```
-
-### `getJob()`
-
-Get details for a specific conversion job.
-
-**Parameters:**
-- `$jobId` (string, required): The job ID
-
-**Returns:** array
-
-**Example:**
-
-```php
-$job = $client->getJob('job-123');
-
-print_r($job);
-// Array
-// (
-//     [id] => job-123
-//     [status] => completed
-//     [original_filename] => photo.png
-//     [download_url] => https://...
-//     ...
-// )
-```
-
-## Events
-
-The client supports event callbacks for tracking conversion progress:
-
-### Event: `start`
-
-Emitted when conversion starts.
-
-```php
-$client->on('start', function($data) {
-    echo "Starting: {$data['file_name']}\n";
-    echo "Converting {$data['source_format']} to {$data['target_format']}\n";
-});
-```
-
-### Event: `progress`
-
-Emitted at each step of the conversion process.
-
-```php
-$client->on('progress', function($data) {
-    echo "Step: {$data['step']}\n";
-    echo "Message: {$data['message']}\n";
-    // $data['step'] can be:
-    // - 'requesting-upload-url'
-    // - 'uploading'
-    // - 'confirming'
-    // - 'converting'
-    // - 'downloading'
-});
-```
-
-### Event: `status`
-
-Emitted during polling for job completion.
-
-```php
-$client->on('status', function($data) {
-    echo "Status: {$data['status']}\n";
-    echo "Attempt: {$data['attempt']}/{$data['max_attempts']}\n";
-});
-```
-
-### Event: `complete`
-
-Emitted when conversion completes successfully.
-
-```php
-$client->on('complete', function($result) {
-    echo "Conversion complete!\n";
-    echo "Output: {$result['output_path']}\n";
-    echo "Size: {$result['file_size']} bytes\n";
-    echo "Time: {$result['processing_time']} ms\n";
-});
-```
-
-### Event: `error`
-
-Emitted when an error occurs.
-
-```php
-$client->on('error', function($data) {
-    echo "Conversion failed: {$data['error']}\n";
-});
-```
-
-## Supported Formats
-
-The SDK supports conversion between all formats supported by Convertorio:
+Convert between 20+ image formats:
 
 **Common Formats:**
 - JPG/JPEG
@@ -273,319 +207,125 @@ The SDK supports conversion between all formats supported by Convertorio:
 - EPS
 - JXL (JPEG XL)
 
-## Advanced Conversion Options
+## 📊 API Limits
 
-The SDK supports advanced conversion options through the `$conversionMetadata` parameter. This allows you to control aspect ratio, quality, resize dimensions, and more.
+| Plan | Daily Free Conversions | Rate Limit | Concurrent Jobs | Max File Size |
+|------|----------------------|------------|----------------|---------------|
+| Free | 2 per day | 1 req/sec | 5 | 20 MB |
+| Paid | Unlimited* | 1 req/sec | 5 | 20 MB |
 
-### Aspect Ratio Control
+*With purchased points
 
-Transform images to specific aspect ratios with automatic cropping or padding.
+## 📁 Repository Structure
 
-**Available Aspect Ratios:**
-- `original` - Keep original aspect ratio (default)
-- `1:1` - Square (Instagram, profile pictures)
-- `4:3` - Traditional photos
-- `16:9` - Widescreen, YouTube thumbnails
-- `9:16` - Vertical video, Stories
-- `21:9` - Ultrawide
-- Custom ratios like `16:10`, `3:2`, etc.
-
-**Crop Strategies:**
-- `fit` - Add padding (letterbox/pillarbox) to maintain entire image
-- `crop-center` - Crop from center (default)
-- `crop-top` - Crop from top
-- `crop-bottom` - Crop from bottom
-- `crop-left` - Crop from left
-- `crop-right` - Crop from right
-
-**Example:**
-
-```php
-$result = $client->convertFile(
-    './photo.jpg',
-    'jpg',
-    null,
-    [
-        'aspect_ratio' => '16:9',
-        'crop_strategy' => 'crop-center'
-    ]
-);
+```
+sdk/
+├── src/               # PHP SDK source (root level for Packagist)
+│   └── ConvertorioClient.php
+├── libs/              # SDK implementations
+│   ├── nodejs/        # Node.js SDK
+│   ├── python/        # Python SDK
+│   └── php/           # PHP SDK
+├── examples/          # Usage examples
+│   ├── nodejs/        # Node.js examples
+│   ├── python/        # Python examples
+│   └── php/           # PHP examples
+├── test/              # Test suites
+│   ├── nodejs/        # Node.js tests
+│   ├── python/        # Python tests
+│   └── php/           # PHP tests
+├── docs/              # Documentation
+│   ├── nodejs/        # Node.js documentation
+│   ├── python/        # Python documentation
+│   └── php/           # PHP documentation
+├── composer.json      # PHP package config (root level)
+├── examples.php       # PHP examples (root level)
+├── README.md          # This file
+└── README-PHP.md      # PHP documentation
 ```
 
-### Quality Control
+## 🛠️ Development
 
-Adjust compression quality for lossy formats (JPG, WebP, AVIF, HEIC).
+### Building from Source
 
-**Quality Range:** 1-100
-- 1 = Lowest quality, smallest file size
-- 100 = Highest quality, largest file size
-- **Default:** 85 (recommended balance)
+Each language SDK can be built independently. See the language-specific README for build instructions.
 
-**Quality Guidelines:**
-- **95-100**: Professional photography, archival
-- **85-94**: High quality for web (recommended)
-- **70-84**: Good quality, smaller files
-- **50-69**: Medium quality, significant compression
-- **1-49**: Low quality, maximum compression
+### Running Examples
 
-**Example:**
+Navigate to the examples directory for your language:
 
-```php
-$result = $client->convertFile(
-    './photo.jpg',
-    'webp',
-    null,
-    ['quality' => 90]
-);
+```bash
+# Node.js examples
+cd examples/nodejs
+node basic-conversion.js
+
+# Python examples
+cd examples/python
+python basic_conversion.py
+
+# PHP examples
+php examples.php
 ```
 
-### ICO Format Options
+### Testing
 
-Create Windows icons with specific pixel sizes.
+```bash
+# Node.js
+cd libs/nodejs
+npm test
 
-**Available Sizes:** 16, 32, 48, 64, 128, 256
+# Python
+cd test/python/simple-convert
+python simple-test.py
+python test-resize.py
+python test-with-metadata.py
 
-The image will be automatically cropped to square using the selected crop strategy.
-
-**Example:**
-
-```php
-$result = $client->convertFile(
-    './logo.png',
-    'ico',
-    null,
-    [
-        'icon_size' => 64,
-        'crop_strategy' => 'crop-center'
-    ]
-);
+# PHP
+cd test/php/simple-convert
+php simple-test.php
+php test-resize.php
+php test-with-metadata.php
 ```
 
-### Resize Control
+## 📚 Resources
 
-Resize images to specific dimensions while optionally maintaining aspect ratio.
-
-**Parameters:**
-- `resize_width` - Target width in pixels (1-10000)
-- `resize_height` - Target height in pixels (1-10000)
-
-**Resize Behavior:**
-- **Width only**: Height calculated automatically (maintains aspect ratio)
-- **Height only**: Width calculated automatically (maintains aspect ratio)
-- **Both specified**: Exact dimensions (may distort image if aspect ratio differs)
-
-**Example - Resize by width:**
-
-```php
-$result = $client->convertFile(
-    './photo.jpg',
-    'jpg',
-    null,
-    ['resize_width' => 800]  // Height will be calculated automatically
-);
-```
-
-**Example - Resize by height:**
-
-```php
-$result = $client->convertFile(
-    './photo.jpg',
-    'jpg',
-    null,
-    ['resize_height' => 600]  // Width will be calculated automatically
-);
-```
-
-**Example - Resize to exact dimensions:**
-
-```php
-$result = $client->convertFile(
-    './photo.jpg',
-    'jpg',
-    null,
-    [
-        'resize_width' => 1920,
-        'resize_height' => 1080  // May distort if original aspect ratio differs
-    ]
-);
-```
-
-**Example - Combine resize with aspect ratio:**
-
-```php
-// Create a 500x500 square thumbnail with center crop
-$result = $client->convertFile(
-    './photo.jpg',
-    'jpg',
-    null,
-    [
-        'aspect_ratio' => '1:1',
-        'crop_strategy' => 'crop-center',
-        'resize_width' => 500,
-        'quality' => 90
-    ]
-);
-```
-
-**Resize Guidelines:**
-- Use width/height resize for responsive images
-- Combine with aspect ratio for precise control
-- Quality parameter affects lossy formats (JPG, WebP, AVIF)
-- LANCZOS resampling ensures high-quality results
-
-## Examples
-
-### Basic Conversion
-
-```php
-<?php
-
-require 'vendor/autoload.php';
-
-use Convertorio\SDK\ConvertorioClient;
-
-$client = new ConvertorioClient('your_api_key_here');
-
-$result = $client->convertFile('./input.png', 'jpg');
-
-echo "Done! " . $result['output_path'];
-```
-
-### With Progress Events
-
-```php
-<?php
-
-require 'vendor/autoload.php';
-
-use Convertorio\SDK\ConvertorioClient;
-
-$client = new ConvertorioClient('your_api_key_here');
-
-$client->on('progress', function($data) {
-    echo "[{$data['step']}] {$data['message']}\n";
-});
-
-$client->on('complete', function($result) {
-    echo "✓ Conversion completed!\n";
-    echo "Output: {$result['output_path']}\n";
-});
-
-$result = $client->convertFile('./photo.png', 'webp');
-```
-
-### Batch Conversion
-
-```php
-<?php
-
-require 'vendor/autoload.php';
-
-use Convertorio\SDK\ConvertorioClient;
-
-$client = new ConvertorioClient('your_api_key_here');
-
-// Get all PNG files
-$files = glob('./images/*.png');
-
-// Convert all to WebP
-foreach ($files as $file) {
-    $result = $client->convertFile($file, 'webp');
-    echo "Converted: {$file}\n";
-}
-```
-
-### Advanced Conversion with Metadata
-
-```php
-<?php
-
-require 'vendor/autoload.php';
-
-use Convertorio\SDK\ConvertorioClient;
-
-$client = new ConvertorioClient('your_api_key_here');
-
-// Convert to 16:9 aspect ratio with high quality
-$result = $client->convertFile(
-    './photo.jpg',
-    'webp',
-    null,
-    [
-        'aspect_ratio' => '16:9',
-        'crop_strategy' => 'crop-center',
-        'quality' => 90
-    ]
-);
-
-echo "Converted to 16:9: {$result['output_path']}";
-```
-
-### Error Handling
-
-```php
-<?php
-
-require 'vendor/autoload.php';
-
-use Convertorio\SDK\ConvertorioClient;
-
-$client = new ConvertorioClient('your_api_key_here');
-
-try {
-    $result = $client->convertFile('./image.png', 'jpg');
-    echo "Success: {$result['output_path']}";
-} catch (Exception $e) {
-    echo "Conversion failed: {$e->getMessage()}";
-
-    // Handle specific errors
-    if (strpos($e->getMessage(), 'Insufficient') !== false) {
-        echo "Not enough points/credits";
-    }
-}
-```
-
-## Rate Limiting
-
-The API has the following rate limits:
-- **1 request per second** per IP address
-- **5 concurrent jobs** maximum per user
-
-The SDK automatically handles rate limiting by polling job status with appropriate delays.
-
-## Error Handling
-
-Common errors you might encounter:
-
-| Error | Description | Solution |
-|-------|-------------|----------|
-| `API key is required` | No API key provided | Provide your API key in the constructor |
-| `Input file not found` | File doesn't exist | Check the file path |
-| `HTTP request failed` | Wrong or expired API key | Verify your API key in account settings |
-| `Insufficient credits` | Not enough points | Purchase more points or use free tier |
-| `File size exceeds limit` | File too large | Maximum file size is 20 MB |
-| `Conversion timeout` | Job took too long | Try again or contact support |
-
-## Best Practices
-
-1. **Reuse the client instance** - Don't create a new client for each conversion
-2. **Use events for long conversions** - Monitor progress instead of just waiting
-3. **Handle errors gracefully** - Always wrap conversions in try/catch
-4. **Respect rate limits** - Use batch processing with delays if converting many files
-5. **Check file sizes** - Maximum file size is 20 MB
-6. **Validate formats** - Check that the target format is supported
-
-## Support
-
-- **Documentation:** [https://convertorio.com/docs](https://convertorio.com/docs)
-- **API Reference:** [https://convertorio.com/api-docs](https://convertorio.com/api-docs)
+- **Main Website:** [convertorio.com](https://convertorio.com)
+- **API Documentation:** [convertorio.com/api-docs](https://convertorio.com/api-docs)
 - **Support:** [support@convertorio.com](mailto:support@convertorio.com)
-- **GitHub Issues:** [https://github.com/convertorio/sdk/issues](https://github.com/convertorio/sdk/issues)
+- **GitHub Repository:** [github.com/convertorio/sdk](https://github.com/convertorio/sdk)
 
-## License
+## 🤝 Contributing
 
-MIT License - see LICENSE file for details
+We welcome contributions! Here's how you can help:
 
-## Contributing
+1. **Report bugs** - Open an issue describing the problem
+2. **Suggest features** - Open an issue with your feature request
+3. **Submit pull requests** - Fork, make changes, and submit a PR
+4. **Improve documentation** - Help make the docs better
+5. **Add SDK for new language** - Implement SDK for a language we don't support yet
 
-Contributions are welcome! Please see [CONTRIBUTING.md](../../CONTRIBUTING.md) for guidelines.
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed guidelines.
+
+## 📄 License
+
+All SDKs are released under the MIT License. See [LICENSE](./LICENSE) for details.
+
+## 🔔 Stay Updated
+
+- Star this repository to get notifications about new releases
+- Follow us on [Twitter](https://twitter.com/convertorio)
+- Subscribe to our [newsletter](https://convertorio.com/newsletter)
+
+## ❓ Support
+
+Need help? Here are your options:
+
+1. **Documentation** - Check the language-specific docs
+2. **Examples** - Browse the examples directory
+3. **GitHub Issues** - [Open an issue](https://github.com/convertorio/sdk/issues)
+4. **Email Support** - [support@convertorio.com](mailto:support@convertorio.com)
+5. **Community** - Join our [Discord server](https://discord.gg/convertorio)
+
+---
+
+Made with ❤️ by the Convertorio team
