@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"mime/multipart"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -285,26 +284,20 @@ func (c *Client) uploadToS3(uploadURL, filePath string) error {
 	}
 	defer file.Close()
 
-	var buf bytes.Buffer
-	writer := multipart.NewWriter(&buf)
-
-	part, err := writer.CreateFormFile("file", filepath.Base(filePath))
+	// Get file info to set content length
+	fileInfo, err := file.Stat()
 	if err != nil {
-		return fmt.Errorf("failed to create form file: %w", err)
+		return fmt.Errorf("failed to stat file: %w", err)
 	}
 
-	if _, err := io.Copy(part, file); err != nil {
-		return fmt.Errorf("failed to copy file: %w", err)
-	}
-
-	writer.Close()
-
-	req, err := http.NewRequest("PUT", uploadURL, &buf)
+	req, err := http.NewRequest("PUT", uploadURL, file)
 	if err != nil {
 		return fmt.Errorf("failed to create upload request: %w", err)
 	}
 
-	req.Header.Set("Content-Type", writer.FormDataContentType())
+	// Set appropriate headers for S3
+	req.Header.Set("Content-Type", "application/octet-stream")
+	req.ContentLength = fileInfo.Size()
 
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
