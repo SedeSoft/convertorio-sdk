@@ -270,6 +270,165 @@ The SDK supports conversion between all formats supported by Convertorio:
 - EPS
 - JXL (JPEG XL)
 
+## Advanced Conversion Options
+
+The SDK supports advanced conversion options through the `conversionMetadata` parameter. This allows you to control aspect ratio, quality, resize dimensions, and more.
+
+### Aspect Ratio Control
+
+Transform images to specific aspect ratios with automatic cropping or padding.
+
+**Available Aspect Ratios:**
+- `original` - Keep original aspect ratio (default)
+- `1:1` - Square (Instagram, profile pictures)
+- `4:3` - Traditional photos
+- `16:9` - Widescreen, YouTube thumbnails
+- `9:16` - Vertical video, Stories
+- `21:9` - Ultrawide
+- Custom ratios like `16:10`, `3:2`, etc.
+
+**Crop Strategies:**
+- `fit` - Add padding (letterbox/pillarbox) to maintain entire image
+- `crop-center` - Crop from center (default)
+- `crop-top` - Crop from top
+- `crop-bottom` - Crop from bottom
+- `crop-left` - Crop from left
+- `crop-right` - Crop from right
+
+**Example:**
+
+```javascript
+const result = await client.convertFile({
+    inputPath: './photo.jpg',
+    targetFormat: 'jpg',
+    conversionMetadata: {
+        aspect_ratio: '16:9',
+        crop_strategy: 'crop-center'
+    }
+});
+```
+
+### Quality Control
+
+Adjust compression quality for lossy formats (JPG, WebP, AVIF, HEIC).
+
+**Quality Range:** 1-100
+- 1 = Lowest quality, smallest file size
+- 100 = Highest quality, largest file size
+- **Default:** 85 (recommended balance)
+
+**Quality Guidelines:**
+- **95-100**: Professional photography, archival
+- **85-94**: High quality for web (recommended)
+- **70-84**: Good quality, smaller files
+- **50-69**: Medium quality, significant compression
+- **1-49**: Low quality, maximum compression
+
+**Example:**
+
+```javascript
+const result = await client.convertFile({
+    inputPath: './photo.jpg',
+    targetFormat: 'webp',
+    conversionMetadata: {
+        quality: 90
+    }
+});
+```
+
+### ICO Format Options
+
+Create Windows icons with specific pixel sizes.
+
+**Available Sizes:** 16, 32, 48, 64, 128, 256
+
+The image will be automatically cropped to square using the selected crop strategy.
+
+**Example:**
+
+```javascript
+const result = await client.convertFile({
+    inputPath: './logo.png',
+    targetFormat: 'ico',
+    conversionMetadata: {
+        icon_size: 64,
+        crop_strategy: 'crop-center'
+    }
+});
+```
+
+### Resize Control
+
+Resize images to specific dimensions while optionally maintaining aspect ratio.
+
+**Parameters:**
+- `resize_width` - Target width in pixels (1-10000)
+- `resize_height` - Target height in pixels (1-10000)
+
+**Resize Behavior:**
+- **Width only**: Height calculated automatically (maintains aspect ratio)
+- **Height only**: Width calculated automatically (maintains aspect ratio)
+- **Both specified**: Exact dimensions (may distort image if aspect ratio differs)
+
+**Example - Resize by width:**
+
+```javascript
+const result = await client.convertFile({
+    inputPath: './photo.jpg',
+    targetFormat: 'jpg',
+    conversionMetadata: {
+        resize_width: 800  // Height will be calculated automatically
+    }
+});
+```
+
+**Example - Resize by height:**
+
+```javascript
+const result = await client.convertFile({
+    inputPath: './photo.jpg',
+    targetFormat: 'jpg',
+    conversionMetadata: {
+        resize_height: 600  // Width will be calculated automatically
+    }
+});
+```
+
+**Example - Resize to exact dimensions:**
+
+```javascript
+const result = await client.convertFile({
+    inputPath: './photo.jpg',
+    targetFormat: 'jpg',
+    conversionMetadata: {
+        resize_width: 1920,
+        resize_height: 1080  // May distort if original aspect ratio differs
+    }
+});
+```
+
+**Example - Combine resize with aspect ratio:**
+
+```javascript
+// Create a 500x500 square thumbnail with center crop
+const result = await client.convertFile({
+    inputPath: './photo.jpg',
+    targetFormat: 'jpg',
+    conversionMetadata: {
+        aspect_ratio: '1:1',
+        crop_strategy: 'crop-center',
+        resize_width: 500,
+        quality: 90
+    }
+});
+```
+
+**Resize Guidelines:**
+- Use width/height resize for responsive images
+- Combine with aspect ratio for precise control
+- Quality parameter affects lossy formats (JPG, WebP, AVIF)
+- LANCZOS resampling ensures high-quality results
+
 ## Examples
 
 ### Basic Conversion
