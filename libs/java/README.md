@@ -12,7 +12,7 @@ Official Java SDK for [Convertorio](https://convertorio.com) - Simple and powerf
 - ✅ **Type Safe** - Fully typed API with builder patterns
 - ✅ **No External Image Libraries** - Uses OkHttp and Gson only
 - ✅ **Automatic File Handling** - Upload and download handled automatically
-- ✅ **Supports Java 11+** - Compatible with modern Java versions
+- ✅ **Java 11+ Required** - Compatible with Java 11, 17, 21 and later versions
 
 ## Supported Formats
 
@@ -418,9 +418,16 @@ if (!inputFile.exists()) {
 
 ## Requirements
 
-- Java 11 or higher
-- Maven or Gradle
+- **Java 11 or higher** (Java 11, 17, 21+ recommended)
+- Maven 3.6+ or Gradle 7.0+
 - Internet connection
+
+**Supported Java Versions:**
+- ✅ Java 11 (LTS) - Minimum required
+- ✅ Java 17 (LTS) - Recommended
+- ✅ Java 21 (LTS) - Recommended
+- ✅ Java 22, 23, 24, 25 - Supported
+- ❌ Java 8-10 - Not supported
 
 ## Dependencies
 
