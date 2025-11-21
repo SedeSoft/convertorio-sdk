@@ -1,0 +1,13 @@
+C:\GitRepos\convertorio-com\sdk\libs\dotnet\Convertorio.SDK\bin\Release\netstandard2.0\Convertorio.SDK.deps.json
+C:\GitRepos\convertorio-com\sdk\libs\dotnet\Convertorio.SDK\bin\Release\netstandard2.0\Convertorio.SDK.dll
+C:\GitRepos\convertorio-com\sdk\libs\dotnet\Convertorio.SDK\bin\Release\netstandard2.0\Convertorio.SDK.pdb
+C:\GitRepos\convertorio-com\sdk\libs\dotnet\Convertorio.SDK\bin\Release\netstandard2.0\Convertorio.SDK.xml
+C:\GitRepos\convertorio-com\sdk\libs\dotnet\Convertorio.SDK\obj\Release\netstandard2.0\Convertorio.SDK.csproj.AssemblyReference.cache
+C:\GitRepos\convertorio-com\sdk\libs\dotnet\Convertorio.SDK\obj\Release\netstandard2.0\Convertorio.SDK.GeneratedMSBuildEditorConfig.editorconfig
+C:\GitRepos\convertorio-com\sdk\libs\dotnet\Convertorio.SDK\obj\Release\netstandard2.0\Convertorio.SDK.AssemblyInfoInputs.cache
+C:\GitRepos\convertorio-com\sdk\libs\dotnet\Convertorio.SDK\obj\Release\netstandard2.0\Convertorio.SDK.AssemblyInfo.cs
+C:\GitRepos\convertorio-com\sdk\libs\dotnet\Convertorio.SDK\obj\Release\netstandard2.0\Convertorio.SDK.csproj.CoreCompileInputs.cache
+C:\GitRepos\convertorio-com\sdk\libs\dotnet\Convertorio.SDK\obj\Release\netstandard2.0\Convertorio.SDK.sourcelink.json
+C:\GitRepos\convertorio-com\sdk\libs\dotnet\Convertorio.SDK\obj\Release\netstandard2.0\Convertorio.SDK.dll
+C:\GitRepos\convertorio-com\sdk\libs\dotnet\Convertorio.SDK\obj\Release\netstandard2.0\Convertorio.SDK.xml
+C:\GitRepos\convertorio-com\sdk\libs\dotnet\Convertorio.SDK\obj\Release\netstandard2.0\Convertorio.SDK.pdb

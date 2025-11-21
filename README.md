@@ -22,7 +22,7 @@ Official SDKs for the Convertorio API - Convert images between 20+ formats with 
 | **Go** | ✅ Available | [docs/go](./docs/go/README.md) | `github.com/SedeSoft/convertorio-sdk/libs/go` |
 | **Java** | ✅ Available | [libs/java](./libs/java/README.md) | `com.sedesoft:convertorio-sdk` |
 | **Ruby** | ✅ Available | [libs/ruby](./libs/ruby/README.md) | `convertorio-sdk` |
-| .NET/C# | 🚧 Coming Soon | - | - |
+| **.NET/C#** | ✅ Available | [libs/dotnet](./libs/dotnet/README.md) | `Convertorio.SDK` |
 
 ## 🚀 Quick Start
 
@@ -191,6 +191,29 @@ puts "Converted! #{result[:output_path]}"
 
 [**→ Full Ruby Documentation**](./libs/ruby/README.md)
 
+### .NET/C#
+
+```bash
+dotnet add package Convertorio.SDK
+```
+
+```csharp
+using Convertorio.SDK;
+
+using (var client = new ConvertorioClient("your_api_key_here"))
+{
+    var result = await client.ConvertFileAsync(new ConversionOptions
+    {
+        InputPath = "./image.png",
+        TargetFormat = "jpg"
+    });
+
+    Console.WriteLine($"Converted! {result.OutputPath}");
+}
+```
+
+[**→ Full .NET Documentation**](./libs/dotnet/README.md)
+
 ## 📖 Language-Specific Documentation
 
 ### Node.js (JavaScript/TypeScript)
@@ -334,9 +357,29 @@ gem install convertorio-sdk
 
 ---
 
-### Other Languages
+### .NET/C#
 
-We're working on SDKs for .NET.
+The .NET SDK provides a modern async/await API with event-driven progress tracking for all .NET platforms.
+
+**Installation:**
+```bash
+dotnet add package Convertorio.SDK
+```
+
+**Features:**
+- Modern async/await API
+- Event-driven progress tracking
+- IDisposable pattern for proper resource cleanup
+- Full IntelliSense support with XML documentation
+- Supports .NET Standard 2.0+ (.NET Core, .NET 5+, .NET Framework 4.6.1+)
+
+**[→ View .NET Documentation](./libs/dotnet/README.md)**
+
+**[→ View .NET Examples](./examples/dotnet/)**
+
+---
+
+### Other Languages
 
 Want to see support for another language? [Open an issue](https://github.com/convertorio/sdk/issues) or contribute!
 

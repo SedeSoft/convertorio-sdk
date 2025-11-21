@@ -1,0 +1,290 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Convertorio.SDK</name>
+    </assembly>
+    <members>
+        <member name="T:Convertorio.SDK.ConvertorioClient">
+            <summary>
+            Convertorio SDK Client for .NET
+            Simple and powerful SDK to convert images using the Convertorio API
+            </summary>
+        </member>
+        <member name="E:Convertorio.SDK.ConvertorioClient.ConversionStart">
+            <summary>
+            Event fired when a conversion starts
+            </summary>
+        </member>
+        <member name="E:Convertorio.SDK.ConvertorioClient.ConversionProgress">
+            <summary>
+            Event fired when conversion progress updates
+            </summary>
+        </member>
+        <member name="E:Convertorio.SDK.ConvertorioClient.ConversionStatus">
+            <summary>
+            Event fired when conversion status updates
+            </summary>
+        </member>
+        <member name="E:Convertorio.SDK.ConvertorioClient.ConversionComplete">
+            <summary>
+            Event fired when a conversion completes successfully
+            </summary>
+        </member>
+        <member name="E:Convertorio.SDK.ConvertorioClient.ConversionError">
+            <summary>
+            Event fired when a conversion encounters an error
+            </summary>
+        </member>
+        <member name="M:Convertorio.SDK.ConvertorioClient.#ctor(System.String,System.String)">
+            <summary>
+            Create a new Convertorio client
+            </summary>
+            <param name="apiKey">Your Convertorio API key</param>
+            <param name="baseUrl">API base URL (default: https://api.convertorio.com)</param>
+        </member>
+        <member name="M:Convertorio.SDK.ConvertorioClient.ConvertFileAsync(Convertorio.SDK.ConversionOptions,System.Threading.CancellationToken)">
+            <summary>
+            Convert an image file
+            </summary>
+            <param name="options">Conversion options</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Conversion result with download URL and file path</returns>
+        </member>
+        <member name="M:Convertorio.SDK.ConvertorioClient.PollJobStatusAsync(System.String,System.Threading.CancellationToken,System.Int32,System.Int32)">
+            <summary>
+            Poll job status until completion
+            </summary>
+        </member>
+        <member name="M:Convertorio.SDK.ConvertorioClient.UploadFileAsync(System.String,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Upload file to presigned URL
+            </summary>
+        </member>
+        <member name="M:Convertorio.SDK.ConvertorioClient.DownloadFileAsync(System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Download file from URL
+            </summary>
+        </member>
+        <member name="M:Convertorio.SDK.ConvertorioClient.GenerateOutputPath(System.String,System.String)">
+            <summary>
+            Generate output path based on input path and target format
+            </summary>
+        </member>
+        <member name="M:Convertorio.SDK.ConvertorioClient.GetAccountAsync(System.Threading.CancellationToken)">
+            <summary>
+            Get account information
+            </summary>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Account details</returns>
+        </member>
+        <member name="M:Convertorio.SDK.ConvertorioClient.ListJobsAsync(Convertorio.SDK.ListJobsOptions,System.Threading.CancellationToken)">
+            <summary>
+            List conversion jobs
+            </summary>
+            <param name="options">List options</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>List of jobs</returns>
+        </member>
+        <member name="M:Convertorio.SDK.ConvertorioClient.GetJobAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Get job status
+            </summary>
+            <param name="jobId">Job ID</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Job details</returns>
+        </member>
+        <member name="T:Convertorio.SDK.ConvertorioException">
+            <summary>
+            Exception thrown by Convertorio SDK operations
+            </summary>
+        </member>
+        <member name="M:Convertorio.SDK.ConvertorioException.#ctor">
+            <summary>
+            Initialize a new ConvertorioException
+            </summary>
+        </member>
+        <member name="M:Convertorio.SDK.ConvertorioException.#ctor(System.String)">
+            <summary>
+            Initialize a new ConvertorioException with a message
+            </summary>
+            <param name="message">Error message</param>
+        </member>
+        <member name="M:Convertorio.SDK.ConvertorioException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initialize a new ConvertorioException with a message and inner exception
+            </summary>
+            <param name="message">Error message</param>
+            <param name="innerException">Inner exception</param>
+        </member>
+        <member name="T:Convertorio.SDK.ConversionOptions">
+            <summary>
+            Conversion options
+            </summary>
+        </member>
+        <member name="P:Convertorio.SDK.ConversionOptions.InputPath">
+            <summary>
+            Path to the input file
+            </summary>
+        </member>
+        <member name="P:Convertorio.SDK.ConversionOptions.TargetFormat">
+            <summary>
+            Target format (jpg, png, webp, avif, etc.)
+            </summary>
+        </member>
+        <member name="P:Convertorio.SDK.ConversionOptions.OutputPath">
+            <summary>
+            Optional output path (auto-generated if not provided)
+            </summary>
+        </member>
+        <member name="P:Convertorio.SDK.ConversionOptions.ConversionMetadata">
+            <summary>
+            Advanced conversion options
+            </summary>
+        </member>
+        <member name="T:Convertorio.SDK.ConversionMetadata">
+            <summary>
+            Advanced conversion metadata
+            </summary>
+        </member>
+        <member name="P:Convertorio.SDK.ConversionMetadata.AspectRatio">
+            <summary>
+            Target aspect ratio (original, 1:1, 4:3, 16:9, 9:16, 21:9, custom)
+            </summary>
+        </member>
+        <member name="P:Convertorio.SDK.ConversionMetadata.CropStrategy">
+            <summary>
+            Crop strategy (fit, crop-center, crop-top, crop-bottom, crop-left, crop-right)
+            </summary>
+        </member>
+        <member name="P:Convertorio.SDK.ConversionMetadata.Quality">
+            <summary>
+            Compression quality 1-100 (for JPG, WebP, AVIF)
+            </summary>
+        </member>
+        <member name="P:Convertorio.SDK.ConversionMetadata.IconSize">
+            <summary>
+            Icon size in pixels (for ICO format: 16, 32, 48, 64, 128, 256)
+            </summary>
+        </member>
+        <member name="P:Convertorio.SDK.ConversionMetadata.CustomWidth">
+            <summary>
+            Custom width in pixels (when aspect_ratio is "custom")
+            </summary>
+        </member>
+        <member name="P:Convertorio.SDK.ConversionMetadata.CustomHeight">
+            <summary>
+            Custom height in pixels (when aspect_ratio is "custom")
+            </summary>
+        </member>
+        <member name="T:Convertorio.SDK.ConversionResult">
+            <summary>
+            Conversion result
+            </summary>
+        </member>
+        <member name="P:Convertorio.SDK.ConversionResult.Success">
+            <summary>
+            Whether the conversion was successful
+            </summary>
+        </member>
+        <member name="P:Convertorio.SDK.ConversionResult.JobId">
+            <summary>
+            Job ID
+            </summary>
+        </member>
+        <member name="P:Convertorio.SDK.ConversionResult.InputPath">
+            <summary>
+            Input file path
+            </summary>
+        </member>
+        <member name="P:Convertorio.SDK.ConversionResult.OutputPath">
+            <summary>
+            Output file path
+            </summary>
+        </member>
+        <member name="P:Convertorio.SDK.ConversionResult.SourceFormat">
+            <summary>
+            Source format
+            </summary>
+        </member>
+        <member name="P:Convertorio.SDK.ConversionResult.TargetFormat">
+            <summary>
+            Target format
+            </summary>
+        </member>
+        <member name="P:Convertorio.SDK.ConversionResult.FileSize">
+            <summary>
+            Output file size in bytes
+            </summary>
+        </member>
+        <member name="P:Convertorio.SDK.ConversionResult.ProcessingTime">
+            <summary>
+            Processing time in milliseconds
+            </summary>
+        </member>
+        <member name="P:Convertorio.SDK.ConversionResult.DownloadUrl">
+            <summary>
+            Download URL
+            </summary>
+        </member>
+        <member name="T:Convertorio.SDK.ListJobsOptions">
+            <summary>
+            Options for listing jobs
+            </summary>
+        </member>
+        <member name="P:Convertorio.SDK.ListJobsOptions.Limit">
+            <summary>
+            Number of jobs to return (default: 50)
+            </summary>
+        </member>
+        <member name="P:Convertorio.SDK.ListJobsOptions.Offset">
+            <summary>
+            Offset for pagination (default: 0)
+            </summary>
+        </member>
+        <member name="P:Convertorio.SDK.ListJobsOptions.Status">
+            <summary>
+            Filter by status (completed, failed, processing, etc.)
+            </summary>
+        </member>
+        <member name="T:Convertorio.SDK.AccountInfo">
+            <summary>
+            Account information
+            </summary>
+        </member>
+        <member name="T:Convertorio.SDK.JobInfo">
+            <summary>
+            Job information (summary)
+            </summary>
+        </member>
+        <member name="T:Convertorio.SDK.JobDetails">
+            <summary>
+            Job details (full)
+            </summary>
+        </member>
+        <member name="T:Convertorio.SDK.ConversionStartEventArgs">
+            <summary>
+            Event args for conversion start
+            </summary>
+        </member>
+        <member name="T:Convertorio.SDK.ConversionProgressEventArgs">
+            <summary>
+            Event args for conversion progress
+            </summary>
+        </member>
+        <member name="T:Convertorio.SDK.ConversionStatusEventArgs">
+            <summary>
+            Event args for conversion status
+            </summary>
+        </member>
+        <member name="T:Convertorio.SDK.ConversionCompleteEventArgs">
+            <summary>
+            Event args for conversion complete
+            </summary>
+        </member>
+        <member name="T:Convertorio.SDK.ConversionErrorEventArgs">
+            <summary>
+            Event args for conversion error
+            </summary>
+        </member>
+    </members>
+</doc>
