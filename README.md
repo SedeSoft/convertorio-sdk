@@ -20,8 +20,8 @@ Official SDKs for the Convertorio API - Convert images between 20+ formats with 
 | **Python** | ✅ Available | [docs/python](./docs/python/README.md) | `convertorio-sdk` |
 | **PHP** | ✅ Available | [README-PHP.md](./README-PHP.md) | `convertorio/sdk` |
 | **Go** | ✅ Available | [docs/go](./docs/go/README.md) | `github.com/SedeSoft/convertorio-sdk/libs/go` |
+| **Java** | ✅ Available | [libs/java](./libs/java/README.md) | `com.sedesoft:convertorio-sdk` |
 | Ruby | 🚧 Coming Soon | - | - |
-| Java | 🚧 Coming Soon | - | - |
 | .NET/C# | 🚧 Coming Soon | - | - |
 
 ## 🚀 Quick Start
@@ -98,7 +98,7 @@ echo "Converted! {$result['output_path']}";
 ### Go
 
 ```bash
-go get github.com/SedeSoft/convertorio-sdk/libs/go@v1.2.0
+go install github.com/SedeSoft/convertorio-sdk/libs/go
 ```
 
 ```go
@@ -129,6 +129,46 @@ func main() {
 ```
 
 [**→ Full Go Documentation**](./docs/go/README.md)
+
+### Java
+
+```xml
+<!-- Maven: Add to pom.xml -->
+<dependency>
+    <groupId>com.sedesoft</groupId>
+    <artifactId>convertorio-sdk</artifactId>
+    <version>1.2.0</version>
+</dependency>
+```
+
+```java
+import com.sedesoft.convertorio.*;
+
+public class Example {
+    public static void main(String[] args) {
+        try {
+            ConvertorioClient client = new ConvertorioClient(
+                ClientConfig.builder()
+                    .apiKey("your_api_key_here")
+                    .build()
+            );
+
+            ConversionResult result = client.convertFile(
+                ConversionOptions.builder()
+                    .inputPath("./image.png")
+                    .targetFormat("jpg")
+                    .build()
+            );
+
+            System.out.println("Converted! " + result.getOutputPath());
+        } catch (ConvertorioException e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+}
+```
+
+[**→ Full Java Documentation**](./libs/java/README.md)
 
 ## 📖 Language-Specific Documentation
 
@@ -202,7 +242,7 @@ The Go SDK provides a type-safe, idiomatic Go API with event callbacks for track
 
 **Installation:**
 ```bash
-go get github.com/SedeSoft/convertorio-sdk/libs/go@v1.2.0
+go install github.com/SedeSoft/convertorio-sdk/libs/go
 ```
 
 **Features:**
@@ -218,9 +258,42 @@ go get github.com/SedeSoft/convertorio-sdk/libs/go@v1.2.0
 
 ---
 
+### Java
+
+The Java SDK provides a type-safe API with builder patterns and event callbacks for tracking conversion progress.
+
+**Installation:**
+
+Maven:
+```xml
+<dependency>
+    <groupId>com.sedesoft</groupId>
+    <artifactId>convertorio-sdk</artifactId>
+    <version>1.2.0</version>
+</dependency>
+```
+
+Gradle:
+```gradle
+implementation 'com.sedesoft:convertorio-sdk:1.2.0'
+```
+
+**Features:**
+- Type-safe API with builder patterns
+- Event callbacks for progress tracking
+- Uses OkHttp and Gson (no external image libraries)
+- Automatic file handling
+- Supports Java 11+
+
+**[→ View Java Documentation](./libs/java/README.md)**
+
+**[→ View Java Examples](./examples/java/)**
+
+---
+
 ### Other Languages
 
-We're working on SDKs for Ruby, Java, and .NET.
+We're working on SDKs for Ruby and .NET.
 
 Want to see support for another language? [Open an issue](https://github.com/convertorio/sdk/issues) or contribute!
 
@@ -283,17 +356,20 @@ sdk/
 │   ├── nodejs/        # Node.js SDK
 │   ├── python/        # Python SDK
 │   ├── php/           # PHP SDK
-│   └── go/            # Go SDK
+│   ├── go/            # Go SDK
+│   └── java/          # Java SDK
 ├── examples/          # Usage examples
 │   ├── nodejs/        # Node.js examples
 │   ├── python/        # Python examples
 │   ├── php/           # PHP examples
-│   └── go/            # Go examples
+│   ├── go/            # Go examples
+│   └── java/          # Java examples
 ├── test/              # Test suites
 │   ├── nodejs/        # Node.js tests
 │   ├── python/        # Python tests
 │   ├── php/           # PHP tests
-│   └── go/            # Go tests
+│   ├── go/            # Go tests
+│   └── java/          # Java tests
 ├── docs/              # Documentation
 │   ├── nodejs/        # Node.js documentation
 │   ├── python/        # Python documentation
@@ -330,6 +406,11 @@ php examples.php
 # Go examples
 cd examples/go
 go run examples.go
+
+# Java examples
+cd examples/java
+javac -cp ".:libs/*" Example.java
+java -cp ".:libs/*" Example
 ```
 
 ### Testing
@@ -354,6 +435,11 @@ php test-with-metadata.php
 # Go
 cd test/go/simple-convert
 go run main.go
+
+# Java
+cd test/java/simple-convert
+javac -cp ".:libs/*" SimpleTest.java
+java -cp ".:libs/*" SimpleTest
 ```
 
 ## 📚 Resources

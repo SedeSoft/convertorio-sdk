@@ -16,15 +16,72 @@ build/
 *.egg-info/
 .eggs/
 
+# Java build artifacts
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+*.tar
+*.zip
+*.7z
+*.rar
+
+# Maven/Gradle
+.mvn/
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
+*.orig
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# GPG signing files (security)
+*.asc
+*.gpg
+*.key
+*.pem
+*.p12
+*.pfx
+
+# Maven Central artifacts (checksums)
+*.md5
+*.sha1
+*.sha256
+*.sha512
+
+# Publishing bundles
+*-bundle.jar
+*-bundle.zip
+
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+.metadata/
+*.sublime-project
+*.sublime-workspace
 
 # OS
 .DS_Store
 Thumbs.db
+desktop.ini
+*.tmp
+*~
 
 # Test files
 *.test.js
@@ -35,12 +92,46 @@ output-*.jpg
 output-*.png
 output-*.webp
 output-*.ico
+output-*.avif
+output-*.heic
+output-*.pdf
+converted-*.jpg
+converted-*.png
+converted-*.webp
+favicon-*.ico
 
 # Logs
 *.log
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
 
-# Environment
+# Environment & Secrets (security)
 .env
 .env.local
 .env.*.local
+.env.production
+.env.development
+.env.test
+*credentials*
+*secret*
+*password*
+*.env.*
+
+# Publishing scripts (internal use only)
+publish-*.sh
+generate-*.sh
+sign-*.sh
+deploy-*.sh
+
+# Temporary files
+*.bak
+*.swp
+*.swo
+*.cache
+.cache/
+.temp/
+.tmp/
+temp/
+tmp/

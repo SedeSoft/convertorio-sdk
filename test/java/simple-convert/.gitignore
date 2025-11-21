@@ -1,0 +1,16 @@
+# Compiled class files
+*.class
+
+# Output files
+output-*.jpg
+output-*.png
+output-*.webp
+output-*.avif
+
+# Package files
+*.jar
+
+# IDE
+.idea/
+*.iml
+.vscode/
