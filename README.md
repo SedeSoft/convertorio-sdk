@@ -21,7 +21,7 @@ Official SDKs for the Convertorio API - Convert images between 20+ formats with 
 | **PHP** | ✅ Available | [README-PHP.md](./README-PHP.md) | `convertorio/sdk` |
 | **Go** | ✅ Available | [docs/go](./docs/go/README.md) | `github.com/SedeSoft/convertorio-sdk/libs/go` |
 | **Java** | ✅ Available | [libs/java](./libs/java/README.md) | `com.sedesoft:convertorio-sdk` |
-| Ruby | 🚧 Coming Soon | - | - |
+| **Ruby** | ✅ Available | [libs/ruby](./libs/ruby/README.md) | `convertorio-sdk` |
 | .NET/C# | 🚧 Coming Soon | - | - |
 
 ## 🚀 Quick Start
@@ -170,6 +170,27 @@ public class Example {
 
 [**→ Full Java Documentation**](./libs/java/README.md)
 
+### Ruby
+
+```bash
+gem install convertorio-sdk
+```
+
+```ruby
+require 'convertorio'
+
+client = Convertorio::Client.new(api_key: 'your_api_key_here')
+
+result = client.convert_file(
+  input_path: './image.png',
+  target_format: 'jpg'
+)
+
+puts "Converted! #{result[:output_path]}"
+```
+
+[**→ Full Ruby Documentation**](./libs/ruby/README.md)
+
 ## 📖 Language-Specific Documentation
 
 ### Node.js (JavaScript/TypeScript)
@@ -291,9 +312,31 @@ implementation 'com.sedesoft:convertorio-sdk:1.2.0'
 
 ---
 
+### Ruby
+
+The Ruby SDK provides a clean, idiomatic Ruby API with event callbacks for tracking conversion progress.
+
+**Installation:**
+```bash
+gem install convertorio-sdk
+```
+
+**Features:**
+- Clean, idiomatic Ruby API
+- Event callbacks for progress tracking
+- HTTParty for HTTP requests
+- Automatic file handling
+- Supports Ruby 2.7+
+
+**[→ View Ruby Documentation](./libs/ruby/README.md)**
+
+**[→ View Ruby Examples](./examples/ruby/)**
+
+---
+
 ### Other Languages
 
-We're working on SDKs for Ruby and .NET.
+We're working on SDKs for .NET.
 
 Want to see support for another language? [Open an issue](https://github.com/convertorio/sdk/issues) or contribute!
 
@@ -357,19 +400,22 @@ sdk/
 │   ├── python/        # Python SDK
 │   ├── php/           # PHP SDK
 │   ├── go/            # Go SDK
-│   └── java/          # Java SDK
+│   ├── java/          # Java SDK
+│   └── ruby/          # Ruby SDK
 ├── examples/          # Usage examples
 │   ├── nodejs/        # Node.js examples
 │   ├── python/        # Python examples
 │   ├── php/           # PHP examples
 │   ├── go/            # Go examples
-│   └── java/          # Java examples
-├── test/              # Test suites
+│   ├── java/          # Java examples
+│   └── ruby/          # Ruby examples
+├── tests/             # Test suites
 │   ├── nodejs/        # Node.js tests
 │   ├── python/        # Python tests
 │   ├── php/           # PHP tests
 │   ├── go/            # Go tests
-│   └── java/          # Java tests
+│   ├── java/          # Java tests
+│   └── ruby/          # Ruby tests
 ├── docs/              # Documentation
 │   ├── nodejs/        # Node.js documentation
 │   ├── python/        # Python documentation
@@ -411,6 +457,10 @@ go run examples.go
 cd examples/java
 javac -cp ".:libs/*" Example.java
 java -cp ".:libs/*" Example
+
+# Ruby examples
+cd examples/ruby
+ruby basic_conversion.rb
 ```
 
 ### Testing
@@ -440,6 +490,11 @@ go run main.go
 cd test/java/simple-convert
 javac -cp ".:libs/*" SimpleTest.java
 java -cp ".:libs/*" SimpleTest
+
+# Ruby
+cd tests/ruby
+bundle install
+bundle exec rspec
 ```
 
 ## 📚 Resources

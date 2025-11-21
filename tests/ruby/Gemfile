@@ -1,0 +1,10 @@
+source 'https://rubygems.org'
+
+# Dependencies for the SDK (same as in gemspec)
+gem 'httparty', '~> 0.21'
+gem 'json', '~> 2.6'
+
+# Test dependencies
+gem 'rspec', '~> 3.12'
+gem 'webmock', '~> 3.18'
+gem 'rake', '~> 13.0'

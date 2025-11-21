@@ -1,0 +1,43 @@
+require 'bundler/gem_tasks'
+require 'rspec/core/rake_task'
+
+RSpec::Core::RakeTask.new(:spec)
+
+task default: :spec
+
+desc 'Run tests'
+task test: :spec
+
+desc 'Build the gem'
+task :build do
+  sh 'gem build convertorio-sdk.gemspec'
+end
+
+desc 'Install the gem locally'
+task install: :build do
+  sh 'gem install ./convertorio-sdk-*.gem'
+end
+
+desc 'Publish to RubyGems'
+task :publish do
+  version = File.read('convertorio-sdk.gemspec').match(/\.version\s*=\s*['"]([^'"]+)['"]/)[1]
+
+  puts "Publishing convertorio-sdk version #{version} to RubyGems..."
+  puts "\nMake sure you have:"
+  puts "1. Updated the version in convertorio-sdk.gemspec"
+  puts "2. Updated CHANGELOG.md"
+  puts "3. Committed all changes"
+  puts "4. Created a git tag for v#{version}"
+  puts "\nPress Enter to continue or Ctrl+C to cancel..."
+  STDIN.gets
+
+  Rake::Task[:build].invoke
+  sh "gem push convertorio-sdk-#{version}.gem"
+  puts "\n✓ Gem published successfully!"
+  puts "View at: https://rubygems.org/gems/convertorio-sdk"
+end
+
+desc 'Clean up build artifacts'
+task :clean do
+  sh 'rm -f *.gem'
+end
