@@ -20,6 +20,7 @@ Convert between these formats:
 - **Raster**: JPG, PNG, WebP, AVIF, HEIC, BMP, TIFF, GIF
 - **Icons**: ICO (with custom sizes)
 - **Raw**: DNG, CR2, NEF, ARW
+- **✨ AI-Powered OCR**: Extract text from any image format with advanced AI technology
 
 ## Installation
 
@@ -238,6 +239,49 @@ Resize options:
 - `resize_height` - Target height in pixels (1-10000)
 - Specify both to force exact dimensions
 - Specify one to maintain aspect ratio
+
+### AI-Powered OCR (Optical Character Recognition)
+
+Extract text from images with state-of-the-art AI accuracy.
+
+```java
+import java.util.Map;
+
+// Extract text as JSON with custom instructions
+Map<String, Object> metadata = Map.of(
+    "ocr_format", "json",
+    "ocr_instructions", "Extract invoice data including date, items, and total"
+);
+
+ConversionResult result = client.convertFile(
+    ConversionOptions.builder()
+        .inputPath("./receipt.jpg")
+        .targetFormat("ocr")
+        .outputPath("./receipt.json")
+        .conversionMetadata(metadata)
+        .build()
+);
+
+System.out.println("Tokens used: " + result.getTokensUsed());
+```
+
+OCR Features:
+- **High Accuracy**: Powered by advanced AI for state-of-the-art text recognition
+- **Multiple Languages**: Automatic language detection and support
+- **Flexible Output**: Choose between `txt` (plain text) or `json` (structured data)
+- **Custom Instructions**: Guide the AI to extract specific information
+- **Handwriting Support**: Recognizes both printed and handwritten text
+- **Token-Based Billing**: Pay only for what you use
+
+OCR Options:
+- `ocr_format` - Output format: `txt` or `json` (default: `txt`)
+- `ocr_instructions` - Custom instructions to guide text extraction (optional)
+
+OCR Use Cases:
+- 📄 Invoice Processing - Extract structured data from invoices and receipts
+- 📝 Form Digitization - Convert paper forms to digital data
+- 📋 Document Archival - Make scanned documents searchable
+- 🏷️ Label Reading - Extract text from product labels and tags
 
 ### Account Management
 

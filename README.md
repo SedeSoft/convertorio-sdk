@@ -423,6 +423,155 @@ Convert between 20+ image formats:
 - EPS
 - JXL (JPEG XL)
 
+**✨ AI-Powered OCR:**
+- Extract text from any image format
+- Powered by advanced AI technology
+- Support for printed and handwritten text
+- JSON or TXT output formats
+
+## 🤖 AI-Powered OCR (NEW)
+
+Extract text from images with state-of-the-art AI accuracy.
+
+### Quick OCR Example
+
+#### Node.js
+```javascript
+const result = await client.convertFile({
+    inputPath: './invoice.jpg',
+    targetFormat: 'ocr',
+    outputPath: './invoice.json',
+    conversionMetadata: {
+        ocr_format: 'json',
+        ocr_instructions: 'Extract invoice data including date, items, and total'
+    }
+});
+
+console.log(`Extracted text, tokens used: ${result.tokensUsed}`);
+```
+
+#### Python
+```python
+result = client.convert_file(
+    input_path='./receipt.jpg',
+    target_format='ocr',
+    output_path='./receipt.txt',
+    conversion_metadata={
+        'ocr_format': 'txt',
+        'ocr_instructions': 'Extract all text from this receipt'
+    }
+)
+
+print(f"Tokens used: {result['tokens_used']}")
+```
+
+#### PHP
+```php
+$result = $client->convertFile(
+    './document.jpg',
+    'ocr',
+    './document.json',
+    [
+        'ocr_format' => 'json',
+        'ocr_instructions' => 'Extract form data as structured JSON'
+    ]
+);
+
+echo "Tokens used: " . $result['tokens_used'];
+```
+
+#### Ruby
+```ruby
+result = client.convert_file(
+  input_path: './form.jpg',
+  target_format: 'ocr',
+  output_path: './form.txt',
+  conversion_metadata: {
+    ocr_format: 'txt',
+    ocr_instructions: 'Extract all text preserving formatting'
+  }
+)
+
+puts "Tokens used: #{result[:tokens_used]}"
+```
+
+#### Go
+```go
+result, err := client.ConvertFile(convertorio.ConvertFileOptions{
+    InputPath:    "./invoice.jpg",
+    TargetFormat: "ocr",
+    OutputPath:   "./invoice.json",
+    ConversionMetadata: map[string]interface{}{
+        "ocr_format":       "json",
+        "ocr_instructions": "Extract invoice items and total",
+    },
+})
+
+fmt.Printf("Tokens used: %d\n", result.TokensUsed)
+```
+
+#### Java
+```java
+ConversionResult result = client.convertFile(
+    ConversionOptions.builder()
+        .inputPath("./receipt.jpg")
+        .targetFormat("ocr")
+        .outputPath("./receipt.txt")
+        .conversionMetadata(Map.of(
+            "ocr_format", "txt",
+            "ocr_instructions", "Extract receipt items and total"
+        ))
+        .build()
+);
+
+System.out.println("Tokens used: " + result.getTokensUsed());
+```
+
+#### .NET/C#
+```csharp
+var result = await client.ConvertFileAsync(new ConversionOptions
+{
+    InputPath = "./invoice.jpg",
+    TargetFormat = "ocr",
+    OutputPath = "./invoice.json",
+    ConversionMetadata = new ConversionMetadata
+    {
+        OcrFormat = "json",
+        OcrInstructions = "Extract invoice data with line items"
+    }
+});
+
+Console.WriteLine($"Tokens used: {result.TokensUsed}");
+```
+
+### OCR Features
+
+- **High Accuracy**: Powered by advanced AI for state-of-the-art text recognition
+- **Multiple Languages**: Automatic language detection and support
+- **Flexible Output**: Choose between `txt` (plain text) or `json` (structured data)
+- **Custom Instructions**: Guide the AI to extract specific information
+- **Handwriting Support**: Recognizes both printed and handwritten text
+- **Table Recognition**: Preserves table structure in extracted text
+- **Token-Based Billing**: Pay only for what you use, with transparent token counts
+
+### OCR Options
+
+| Option | Type | Values | Description |
+|--------|------|--------|-------------|
+| `ocr_format` | string | `txt`, `json` | Output format (default: `txt`) |
+| `ocr_instructions` | string | Any text | Custom instructions to guide extraction |
+
+### Use Cases
+
+- 📄 **Invoice Processing**: Extract structured data from invoices and receipts
+- 📝 **Form Digitization**: Convert paper forms to digital data
+- 📋 **Document Archival**: Make scanned documents searchable
+- 🏷️ **Label Reading**: Extract text from product labels and tags
+- ✍️ **Handwriting Recognition**: Digitize handwritten notes
+- 📊 **Table Extraction**: Convert tables in images to structured data
+
+For complete OCR documentation, see the language-specific README files.
+
 ## 📊 API Limits
 
 | Plan | Daily Free Conversions | Rate Limit | Concurrent Jobs | Max File Size |

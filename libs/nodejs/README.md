@@ -271,6 +271,87 @@ The SDK supports conversion between all formats supported by Convertorio:
 - EPS
 - JXL (JPEG XL)
 
+**✨ AI-Powered OCR:**
+- Extract text from any image format
+- Powered by advanced AI technology
+- Support for printed and handwritten text
+- JSON or TXT output formats
+
+## 🤖 AI-Powered OCR
+
+Extract text from images with state-of-the-art AI accuracy.
+
+### Quick OCR Example
+
+```javascript
+const result = await client.convertFile({
+    inputPath: './invoice.jpg',
+    targetFormat: 'ocr',
+    outputPath: './invoice.json',
+    conversionMetadata: {
+        ocr_format: 'json',
+        ocr_instructions: 'Extract invoice data including date, items, and total'
+    }
+});
+
+console.log(`Extracted text, tokens used: ${result.tokensUsed}`);
+```
+
+### OCR Features
+
+- **High Accuracy**: Powered by advanced AI for state-of-the-art text recognition
+- **Multiple Languages**: Automatic language detection and support
+- **Flexible Output**: Choose between `txt` (plain text) or `json` (structured data)
+- **Custom Instructions**: Guide the AI to extract specific information
+- **Handwriting Support**: Recognizes both printed and handwritten text
+- **Table Recognition**: Preserves table structure in extracted text
+- **Token-Based Billing**: Pay only for what you use, with transparent token counts
+
+### OCR Options
+
+| Option | Type | Values | Description |
+|--------|------|--------|-------------|
+| `ocr_format` | string | `txt`, `json` | Output format (default: `txt`) |
+| `ocr_instructions` | string | Any text | Custom instructions to guide extraction |
+
+### OCR Use Cases
+
+- 📄 **Invoice Processing**: Extract structured data from invoices and receipts
+- 📝 **Form Digitization**: Convert paper forms to digital data
+- 📋 **Document Archival**: Make scanned documents searchable
+- 🏷️ **Label Reading**: Extract text from product labels and tags
+- ✍️ **Handwriting Recognition**: Digitize handwritten notes and documents
+
+### Complete OCR Example
+
+```javascript
+const ConvertorioClient = require('convertorio-sdk');
+
+const client = new ConvertorioClient({
+    apiKey: 'your_api_key_here'
+});
+
+// Extract text as JSON with custom instructions
+const result = await client.convertFile({
+    inputPath: './receipt.jpg',
+    targetFormat: 'ocr',
+    outputPath: './receipt.json',
+    conversionMetadata: {
+        ocr_format: 'json',
+        ocr_instructions: 'Extract merchant name, date, items with prices, and total amount'
+    }
+});
+
+console.log('OCR completed!');
+console.log(`Tokens used: ${result.tokensUsed}`);
+console.log(`Output saved to: ${result.outputPath}`);
+
+// The extracted text is saved to receipt.json
+const fs = require('fs');
+const extractedData = JSON.parse(fs.readFileSync('./receipt.json', 'utf8'));
+console.log(extractedData);
+```
+
 ## Advanced Conversion Options
 
 You can control various aspects of the conversion process by passing a `conversionMetadata` object:

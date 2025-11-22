@@ -374,6 +374,99 @@ Fired when a conversion error occurs.
 
 **Output Formats:** JPG, PNG, WEBP, AVIF, GIF, BMP, TIFF, ICO, PDF, JXL
 
+**✨ AI-Powered OCR:** Extract text from any image format with advanced AI technology
+
+## 🤖 AI-Powered OCR
+
+Extract text from images with state-of-the-art AI accuracy.
+
+### Quick OCR Example
+
+```csharp
+using (var client = new ConvertorioClient(apiKey))
+{
+    var result = await client.ConvertFileAsync(new ConversionOptions
+    {
+        InputPath = "./invoice.jpg",
+        TargetFormat = "ocr",
+        OutputPath = "./invoice.json",
+        ConversionMetadata = new ConversionMetadata
+        {
+            OcrFormat = "json",
+            OcrInstructions = "Extract invoice data with line items"
+        }
+    });
+
+    Console.WriteLine($"Tokens used: {result.TokensUsed}");
+}
+```
+
+### OCR Features
+
+- **High Accuracy**: Powered by advanced AI for state-of-the-art text recognition
+- **Multiple Languages**: Automatic language detection and support
+- **Flexible Output**: Choose between `txt` (plain text) or `json` (structured data)
+- **Custom Instructions**: Guide the AI to extract specific information
+- **Handwriting Support**: Recognizes both printed and handwritten text
+- **Table Recognition**: Preserves table structure in extracted text
+- **Token-Based Billing**: Pay only for what you use, with transparent token counts
+
+### OCR Options
+
+| Property | Type | Values | Description |
+|----------|------|--------|-------------|
+| `OcrFormat` | string | `txt`, `json` | Output format (default: `txt`) |
+| `OcrInstructions` | string | Any text | Custom instructions to guide extraction |
+
+### OCR Use Cases
+
+- 📄 **Invoice Processing**: Extract structured data from invoices and receipts
+- 📝 **Form Digitization**: Convert paper forms to digital data
+- 📋 **Document Archival**: Make scanned documents searchable
+- 🏷️ **Label Reading**: Extract text from product labels and tags
+- ✍️ **Handwriting Recognition**: Digitize handwritten notes and documents
+
+### Complete OCR Example
+
+```csharp
+using System;
+using System.IO;
+using System.Threading.Tasks;
+using Convertorio.SDK;
+using Newtonsoft.Json;
+
+class Program
+{
+    static async Task Main(string[] args)
+    {
+        using (var client = new ConvertorioClient("your_api_key_here"))
+        {
+            // Extract text as JSON with custom instructions
+            var result = await client.ConvertFileAsync(new ConversionOptions
+            {
+                InputPath = "./receipt.jpg",
+                TargetFormat = "ocr",
+                OutputPath = "./receipt.json",
+                ConversionMetadata = new ConversionMetadata
+                {
+                    OcrFormat = "json",
+                    OcrInstructions = "Extract merchant name, date, items with prices, and total amount"
+                }
+            });
+
+            Console.WriteLine("OCR completed!");
+            Console.WriteLine($"Tokens used: {result.TokensUsed}");
+            Console.WriteLine($"Output saved to: {result.OutputPath}");
+
+            // Read the extracted text
+            var jsonContent = await File.ReadAllTextAsync("./receipt.json");
+            var extractedData = JsonConvert.DeserializeObject(jsonContent);
+            Console.WriteLine(extractedData);
+        }
+    }
+}
+```
+
 ## Error Handling
 
 The SDK throws `ConvertorioException` for API-related errors:

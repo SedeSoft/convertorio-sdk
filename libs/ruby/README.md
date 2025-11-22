@@ -272,6 +272,85 @@ The SDK supports conversion between all formats supported by Convertorio:
 - EPS
 - JXL (JPEG XL)
 
+**✨ AI-Powered OCR:**
+- Extract text from any image format
+- Powered by advanced AI technology
+- Support for printed and handwritten text
+- JSON or TXT output formats
+
+## 🤖 AI-Powered OCR
+
+Extract text from images with state-of-the-art AI accuracy.
+
+### Quick OCR Example
+
+```ruby
+result = client.convert_file(
+  input_path: './form.jpg',
+  target_format: 'ocr',
+  output_path: './form.txt',
+  conversion_metadata: {
+    ocr_format: 'txt',
+    ocr_instructions: 'Extract all text preserving formatting'
+  }
+)
+
+puts "Tokens used: #{result[:tokens_used]}"
+```
+
+### OCR Features
+
+- **High Accuracy**: Powered by advanced AI for state-of-the-art text recognition
+- **Multiple Languages**: Automatic language detection and support
+- **Flexible Output**: Choose between `txt` (plain text) or `json` (structured data)
+- **Custom Instructions**: Guide the AI to extract specific information
+- **Handwriting Support**: Recognizes both printed and handwritten text
+- **Table Recognition**: Preserves table structure in extracted text
+- **Token-Based Billing**: Pay only for what you use, with transparent token counts
+
+### OCR Options
+
+| Option | Type | Values | Description |
+|--------|------|--------|-------------|
+| `ocr_format` | string | `txt`, `json` | Output format (default: `txt`) |
+| `ocr_instructions` | string | Any text | Custom instructions to guide extraction |
+
+### OCR Use Cases
+
+- 📄 **Invoice Processing**: Extract structured data from invoices and receipts
+- 📝 **Form Digitization**: Convert paper forms to digital data
+- 📋 **Document Archival**: Make scanned documents searchable
+- 🏷️ **Label Reading**: Extract text from product labels and tags
+- ✍️ **Handwriting Recognition**: Digitize handwritten notes and documents
+
+### Complete OCR Example
+
+```ruby
+require 'convertorio'
+require 'json'
+
+client = Convertorio::Client.new(api_key: 'your_api_key_here')
+
+# Extract text as JSON with custom instructions
+result = client.convert_file(
+  input_path: './invoice.jpg',
+  target_format: 'ocr',
+  output_path: './invoice.json',
+  conversion_metadata: {
+    ocr_format: 'json',
+    ocr_instructions: 'Extract merchant name, date, items with prices, and total amount'
+  }
+)
+
+puts 'OCR completed!'
+puts "Tokens used: #{result[:tokens_used]}"
+puts "Output saved to: #{result[:output_path]}"
+
+# Read the extracted text
+extracted_data = JSON.parse(File.read('./invoice.json'))
+puts extracted_data
+```
+
 ## Advanced Conversion Options
 
 You can control various aspects of the conversion process by passing a `conversion_metadata` hash:
