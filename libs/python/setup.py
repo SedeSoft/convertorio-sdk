@@ -11,8 +11,8 @@ long_description = (this_directory / "README.md").read_text(encoding='utf-8')
 
 setup(
     name='convertorio-sdk',
-    version='1.2.0',
-    description='Official Convertorio SDK for Python - Convert images easily with a simple API',
+    version='1.2.1',
+    description='Official Convertorio SDK for Python - Convert images and extract text with AI-powered OCR',
     long_description=long_description,
     long_description_content_type='text/markdown',
     author='Convertorio',
@@ -42,7 +42,7 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Multimedia :: Graphics :: Graphics Conversion',
     ],
-    keywords='convertorio image conversion converter api sdk jpg png webp avif heic image-converter file-conversion',
+    keywords='convertorio image conversion converter api sdk jpg png webp avif heic image-converter file-conversion ocr text-extraction ai',
     license='MIT',
     include_package_data=True,
     zip_safe=False,

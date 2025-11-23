@@ -257,7 +257,8 @@ class ConvertorioClient:
                 'target_format': target_format.lower(),
                 'file_size': output_stats.st_size,
                 'processing_time': result.get('processing_time_ms', 0),
-                'download_url': result['download_url']
+                'download_url': result['download_url'],
+                'tokens_used': result.get('tokens_used')
             }
 
             self._emit('complete', conversion_result)
