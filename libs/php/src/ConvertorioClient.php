@@ -202,7 +202,8 @@ class ConvertorioClient
                 'target_format' => strtolower($targetFormat),
                 'file_size' => filesize($finalOutputPath),
                 'processing_time' => $result['processing_time_ms'] ?? 0,
-                'download_url' => $result['download_url']
+                'download_url' => $result['download_url'],
+                'tokens_used' => $result['tokens_used'] ?? null
             ];
 
             $this->emit('complete', $conversionResult);
