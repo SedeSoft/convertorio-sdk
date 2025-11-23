@@ -3074,7 +3074,7 @@
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
-    "version": "1.2.1",
+    "version": "1.2.2",
     "restore": {
       "projectUniqueName": "C:\\GitRepos\\convertorio-com\\sdk\\libs\\dotnet\\Convertorio.SDK\\Convertorio.SDK.csproj",
       "projectName": "Convertorio.SDK",

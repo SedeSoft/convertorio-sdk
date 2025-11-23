@@ -4,11 +4,11 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <PackageId>Convertorio.SDK</PackageId>
-    <Version>1.2.1</Version>
+    <Version>1.2.2</Version>
     <Authors>Convertorio</Authors>
     <Company>Convertorio</Company>
     <Product>Convertorio SDK</Product>
-    <Description>Official Convertorio SDK for .NET - Convert images easily with a simple, async API. Supports 20+ image formats including JPG, PNG, WebP, AVIF, HEIC, and more.</Description>
+    <Description>Official Convertorio SDK for .NET - Convert images easily with a simple, async API. Supports 20+ image formats including JPG, PNG, WebP, AVIF, HEIC, and AI-powered OCR for text extraction.</Description>
     <PackageTags>convertorio;image;conversion;converter;api;sdk;jpg;png;webp;avif;heic;image-converter;file-conversion</PackageTags>
     <PackageProjectUrl>https://github.com/SedeSoft/convertorio-sdk</PackageProjectUrl>
     <RepositoryUrl>https://github.com/SedeSoft/convertorio-sdk</RepositoryUrl>

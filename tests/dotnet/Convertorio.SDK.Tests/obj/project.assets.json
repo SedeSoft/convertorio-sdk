@@ -1756,7 +1756,7 @@
           "build/net6.0/xunit.runner.visualstudio.props": {}
         }
       },
-      "Convertorio.SDK/1.2.0": {
+      "Convertorio.SDK/1.2.1": {
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
         "dependencies": {
@@ -5547,7 +5547,7 @@
         "xunit.runner.visualstudio.nuspec"
       ]
     },
-    "Convertorio.SDK/1.2.0": {
+    "Convertorio.SDK/1.2.1": {
       "type": "project",
       "path": "../../../libs/dotnet/Convertorio.SDK/Convertorio.SDK.csproj",
       "msbuildProject": "../../../libs/dotnet/Convertorio.SDK/Convertorio.SDK.csproj"
@@ -5555,7 +5555,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "Convertorio.SDK >= 1.2.0",
+      "Convertorio.SDK >= 1.2.1",
       "Microsoft.NET.Test.Sdk >= 17.8.0",
       "Moq >= 4.20.70",
       "xunit >= 2.6.2",

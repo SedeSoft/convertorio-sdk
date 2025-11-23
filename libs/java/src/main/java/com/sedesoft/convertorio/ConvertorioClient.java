@@ -191,7 +191,8 @@ public class ConvertorioClient {
                 options.getTargetFormat().toLowerCase(),
                 new File(outputPath).length(),
                 job.getProcessingTimeMs(),
-                job.getDownloadUrl()
+                job.getDownloadUrl(),
+                job.getTokensUsed()
             );
 
             emit("complete", EventData.fromResult(result));

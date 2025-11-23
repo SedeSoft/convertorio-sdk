@@ -21,6 +21,9 @@ public class Job {
     @SerializedName("processing_time_ms")
     private Long processingTimeMs;
 
+    @SerializedName("tokens_used")
+    private Integer tokensUsed;
+
     @SerializedName("download_url")
     private String downloadUrl;
 
@@ -61,6 +64,10 @@ public class Job {
         return processingTimeMs;
     }
 
+    public Integer getTokensUsed() {
+        return tokensUsed;
+    }
+
     public String getDownloadUrl() {
         return downloadUrl;
     }
@@ -90,6 +97,7 @@ public class Job {
                 ", targetFormat='" + targetFormat + '\'' +
                 ", fileSize=" + fileSize +
                 ", processingTimeMs=" + processingTimeMs +
+                ", tokensUsed=" + tokensUsed +
                 ", downloadUrl='" + downloadUrl + '\'' +
                 ", errorMessage='" + errorMessage + '\'' +
                 ", createdAt='" + createdAt + '\'' +

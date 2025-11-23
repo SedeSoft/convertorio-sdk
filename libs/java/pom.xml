@@ -7,11 +7,11 @@
 
     <groupId>com.sedesoft</groupId>
     <artifactId>convertorio-sdk</artifactId>
-    <version>1.2.0</version>
+    <version>1.2.1</version>
     <packaging>jar</packaging>
 
     <name>Convertorio SDK</name>
-    <description>Official Java SDK for Convertorio - Simple and powerful image conversion API</description>
+    <description>Official Java SDK for Convertorio - Simple and powerful file conversion API with AI-powered OCR for text extraction</description>
     <url>https://github.com/SedeSoft/convertorio-sdk</url>
 
     <licenses>

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Convertorio.SDK.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ec59488995955cafa39d955f4b7915240b5e5d33")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+af10b15ae53885cb65d9d33f62b9cea8cf49cce2")]
 [assembly: System.Reflection.AssemblyProductAttribute("Convertorio.SDK.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Convertorio.SDK.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

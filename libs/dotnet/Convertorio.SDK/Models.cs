@@ -70,6 +70,18 @@ namespace Convertorio.SDK
         /// </summary>
         [JsonProperty("custom_height")]
         public int? CustomHeight { get; set; }
+
+        /// <summary>
+        /// OCR output format (txt or json)
+        /// </summary>
+        [JsonProperty("ocr_format")]
+        public string OcrFormat { get; set; }
+
+        /// <summary>
+        /// OCR custom instructions to guide text extraction
+        /// </summary>
+        [JsonProperty("ocr_instructions")]
+        public string OcrInstructions { get; set; }
     }
 
     /// <summary>
@@ -121,6 +133,11 @@ namespace Convertorio.SDK
         /// Download URL
         /// </summary>
         public string DownloadUrl { get; set; }
+
+        /// <summary>
+        /// Tokens used (for OCR jobs)
+        /// </summary>
+        public int? TokensUsed { get; set; }
     }
 
     /// <summary>
@@ -232,6 +249,9 @@ namespace Convertorio.SDK
 
         [JsonProperty("processing_time_ms")]
         public int? ProcessingTimeMs { get; set; }
+
+        [JsonProperty("tokens_used")]
+        public int? TokensUsed { get; set; }
 
         [JsonProperty("error_message")]
         public string ErrorMessage { get; set; }

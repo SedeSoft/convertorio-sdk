@@ -13,10 +13,11 @@ public class ConversionResult {
     private final long fileSize;
     private final long processingTime;
     private final String downloadUrl;
+    private final Integer tokensUsed;
 
     public ConversionResult(boolean success, String jobId, String inputPath, String outputPath,
                           String sourceFormat, String targetFormat, long fileSize,
-                          long processingTime, String downloadUrl) {
+                          long processingTime, String downloadUrl, Integer tokensUsed) {
         this.success = success;
         this.jobId = jobId;
         this.inputPath = inputPath;
@@ -26,6 +27,7 @@ public class ConversionResult {
         this.fileSize = fileSize;
         this.processingTime = processingTime;
         this.downloadUrl = downloadUrl;
+        this.tokensUsed = tokensUsed;
     }
 
     public boolean isSuccess() {
@@ -64,6 +66,10 @@ public class ConversionResult {
         return downloadUrl;
     }
 
+    public Integer getTokensUsed() {
+        return tokensUsed;
+    }
+
     @Override
     public String toString() {
         return "ConversionResult{" +
@@ -76,6 +82,7 @@ public class ConversionResult {
                 ", fileSize=" + fileSize +
                 ", processingTime=" + processingTime +
                 ", downloadUrl='" + downloadUrl + '\'' +
+                ", tokensUsed=" + tokensUsed +
                 '}';
     }
 }

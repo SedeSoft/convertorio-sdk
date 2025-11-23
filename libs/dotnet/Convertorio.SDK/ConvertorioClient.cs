@@ -194,7 +194,8 @@ namespace Convertorio.SDK
                     TargetFormat = options.TargetFormat.ToLowerInvariant(),
                     FileSize = new FileInfo(outputPath).Length,
                     ProcessingTime = job.ProcessingTimeMs ?? 0,
-                    DownloadUrl = job.DownloadUrl
+                    DownloadUrl = job.DownloadUrl,
+                    TokensUsed = job.TokensUsed
                 };
 
                 OnConversionComplete(new ConversionCompleteEventArgs { Result = result });

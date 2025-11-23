@@ -7,7 +7,7 @@
   "targets": {
     ".NETStandard,Version=v2.0": {},
     ".NETStandard,Version=v2.0/": {
-      "Convertorio.SDK/1.2.1": {
+      "Convertorio.SDK/1.2.2": {
         "dependencies": {
           "Newtonsoft.Json": "13.0.3",
           "System.Net.Http": "4.3.4"
@@ -197,7 +197,7 @@
     }
   },
   "libraries": {
-    "Convertorio.SDK/1.2.1": {
+    "Convertorio.SDK/1.2.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
