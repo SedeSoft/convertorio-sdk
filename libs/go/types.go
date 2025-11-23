@@ -15,6 +15,7 @@ type Job struct {
 	TargetFormat     string                 `json:"target_format"`
 	DownloadURL      string                 `json:"download_url,omitempty"`
 	ProcessingTimeMs int                    `json:"processing_time_ms,omitempty"`
+	TokensUsed       *int                   `json:"tokens_used,omitempty"`
 	Error            string                 `json:"error,omitempty"`
 	CreatedAt        string                 `json:"created_at"`
 	CompletedAt      string                 `json:"completed_at,omitempty"`

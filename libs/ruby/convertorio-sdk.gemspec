@@ -1,11 +1,11 @@
 Gem::Specification.new do |spec|
   spec.name          = "convertorio-sdk"
-  spec.version       = "1.2.0"
+  spec.version       = "1.2.1"
   spec.authors       = ["Convertorio"]
   spec.email         = ["support@convertorio.com"]
 
   spec.summary       = %q{Official Convertorio SDK for Ruby - Convert images easily with a simple API}
-  spec.description   = %q{Ruby SDK for the Convertorio API. Convert images between 20+ formats with just a few lines of code. Supports JPG, PNG, WebP, AVIF, HEIC, GIF, BMP, TIFF, ICO, and more.}
+  spec.description   = %q{Ruby SDK for the Convertorio API. Convert files between 20+ formats with AI-powered OCR for text extraction. Supports JPG, PNG, WebP, AVIF, HEIC, GIF, BMP, TIFF, ICO, PDF, and more.}
   spec.homepage      = "https://github.com/SedeSoft/convertorio-sdk"
   spec.license       = "MIT"
   spec.required_ruby_version = ">= 2.7.0"

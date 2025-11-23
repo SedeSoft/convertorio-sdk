@@ -34,6 +34,7 @@ module Convertorio
         'Authorization' => "Bearer #{@api_key}",
         'Content-Type' => 'application/json'
       )
+      self.class.default_timeout 60
     end
 
     # Register a callback for events
@@ -177,7 +178,8 @@ module Convertorio
           target_format: target_format.downcase,
           file_size: File.size(final_output_path),
           processing_time: job_result['processing_time_ms'],
-          download_url: job_result['download_url']
+          download_url: job_result['download_url'],
+          tokens_used: job_result['tokens_used']
         }
 
         emit(:complete, conversion_result)

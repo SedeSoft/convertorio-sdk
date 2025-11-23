@@ -103,6 +103,7 @@ type ConvertFileResult struct {
 	FileSize       int64                  `json:"file_size"`
 	ProcessingTime int                    `json:"processing_time"`
 	DownloadURL    string                 `json:"download_url"`
+	TokensUsed     *int                   `json:"tokens_used,omitempty"`
 	Metadata       map[string]interface{} `json:"metadata,omitempty"`
 }
 
@@ -219,6 +220,7 @@ func (c *Client) ConvertFile(options ConvertFileOptions) (*ConvertFileResult, er
 		FileSize:       outputSize,
 		ProcessingTime: job.ProcessingTimeMs,
 		DownloadURL:    job.DownloadURL,
+		TokensUsed:     job.TokensUsed,
 		Metadata:       job.Metadata,
 	}
 
