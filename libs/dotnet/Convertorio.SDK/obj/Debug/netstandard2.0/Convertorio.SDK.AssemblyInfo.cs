@@ -17,7 +17,7 @@ using System.Reflection;
     "I. Supports 20+ image formats including JPG, PNG, WebP, AVIF, HEIC, and AI-power" +
     "ed OCR for text extraction."))]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.2.2.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.2.2+8366bc6a2a6f9e28d87efd0cb0311799c02f7b96")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.2.2+e16a18e3ef51a748f7a72d768c96a5a8e3a4d0ea")]
 [assembly: System.Reflection.AssemblyProductAttribute("Convertorio SDK")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Convertorio.SDK")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.2.2.0")]
