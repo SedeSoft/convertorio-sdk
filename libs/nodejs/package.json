@@ -1,7 +1,7 @@
 {
   "name": "convertorio-sdk",
-  "version": "1.2.0",
-  "description": "Official Convertorio SDK for Node.js - Convert images easily with a simple API",
+  "version": "1.2.1",
+  "description": "Official Convertorio SDK for Node.js - Convert images and extract text with AI-powered OCR",
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
@@ -20,7 +20,10 @@
     "avif",
     "heic",
     "image-converter",
-    "file-conversion"
+    "file-conversion",
+    "ocr",
+    "text-extraction",
+    "ai"
   ],
   "author": "Convertorio <support@convertorio.com>",
   "license": "MIT",

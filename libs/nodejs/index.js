@@ -154,7 +154,8 @@ class ConvertorioClient extends EventEmitter {
                 targetFormat: targetFormat.toLowerCase(),
                 fileSize: fs.statSync(finalOutputPath).size,
                 processingTime: result.processing_time_ms,
-                downloadUrl: result.download_url
+                downloadUrl: result.download_url,
+                tokensUsed: result.tokens_used
             };
 
             this.emit('complete', conversionResult);

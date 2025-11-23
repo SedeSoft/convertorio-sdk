@@ -4,15 +4,15 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "convertorio-sdk"
-version = "1.2.0"
-description = "Official Convertorio SDK for Python - Convert images easily with a simple API"
+version = "1.2.1"
+description = "Official Convertorio SDK for Python - Convert images and extract text with AI-powered OCR"
 readme = "README.md"
 requires-python = ">=3.7"
 license = {text = "MIT"}
 authors = [
     {name = "Convertorio", email = "support@convertorio.com"}
 ]
-keywords = ["convertorio", "image", "conversion", "converter", "api", "sdk", "jpg", "png", "webp", "avif", "heic", "image-converter", "file-conversion"]
+keywords = ["convertorio", "image", "conversion", "converter", "api", "sdk", "jpg", "png", "webp", "avif", "heic", "image-converter", "file-conversion", "ocr", "text-extraction", "ai"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
