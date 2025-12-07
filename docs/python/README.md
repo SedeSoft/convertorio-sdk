@@ -11,6 +11,8 @@ Official Python SDK for the Convertorio API. Convert images between 20+ formats 
 - ✅ Type hints included
 - ✅ Batch conversion support
 - ✅ Full error handling
+- ✅ PDF to Thumbnail conversion
+- ✅ AI-powered OCR text extraction
 
 ## Installation
 
@@ -423,6 +425,131 @@ result = client.convert_file(
 - Combine with aspect ratio for precise control
 - Quality parameter affects lossy formats (JPG, WebP, AVIF)
 - LANCZOS resampling ensures high-quality results
+
+## PDF Thumbnails
+
+Generate JPG preview images from PDF documents. The thumbnail is rendered from the first page of the PDF.
+
+### Basic PDF Thumbnail
+
+```python
+from convertorio_sdk import ConvertorioClient
+
+client = ConvertorioClient(api_key='your_api_key_here')
+
+# Convert PDF first page to JPG thumbnail
+result = client.convert_file(
+    input_path='./document.pdf',
+    target_format='thumbnail',
+    output_path='./preview.jpg',
+    conversion_metadata={
+        'thumbnail_width': 800  # Width in pixels (50-2000)
+    }
+)
+
+print(f"Thumbnail saved: {result['output_path']}")
+print(f"Size: {result['file_size']} bytes")
+```
+
+### Thumbnail Options
+
+| Parameter | Type | Range | Default | Description |
+|-----------|------|-------|---------|-------------|
+| `thumbnail_width` | int | 50-2000 | 800 | Width in pixels |
+| `thumbnail_height` | int | 50-2000 | auto | Height (calculated automatically if not set) |
+| `thumbnail_crop` | string | see below | full | Portion of page to capture |
+
+### Crop Modes
+
+Control which portion of the PDF page to capture (from the top):
+
+| Value | Description |
+|-------|-------------|
+| `full` | Complete page - 100% (default) |
+| `half` | Top half - 50% |
+| `third` | Top third - 33% |
+| `quarter` | Top quarter - 25% |
+| `two-thirds` | Top two-thirds - 66% |
+
+### Thumbnail with Crop
+
+```python
+from convertorio_sdk import ConvertorioClient
+
+client = ConvertorioClient(api_key='your_api_key_here')
+
+# Capture only the top half of the PDF page
+result = client.convert_file(
+    input_path='./document.pdf',
+    target_format='thumbnail',
+    output_path='./header_preview.jpg',
+    conversion_metadata={
+        'thumbnail_width': 600,
+        'thumbnail_crop': 'half'  # Only top 50% of page
+    }
+)
+
+print(f"Header thumbnail: {result['output_path']}")
+```
+
+### Thumbnail with Progress Events
+
+```python
+from convertorio_sdk import ConvertorioClient
+
+client = ConvertorioClient(api_key='your_api_key_here')
+
+# Set up progress callbacks
+client.on('progress', lambda d: print(f"Step: {d['step']}"))
+client.on('complete', lambda d: print(f"Done! Job: {d['job_id']}"))
+client.on('error', lambda d: print(f"Error: {d['error']}"))
+
+# Convert with progress tracking
+result = client.convert_file(
+    input_path='./report.pdf',
+    target_format='thumbnail',
+    conversion_metadata={
+        'thumbnail_width': 400,
+        'thumbnail_crop': 'third'  # Just the header area
+    }
+)
+```
+
+### Batch PDF Thumbnails
+
+```python
+from pathlib import Path
+from convertorio_sdk import ConvertorioClient
+
+client = ConvertorioClient(api_key='your_api_key_here')
+
+# Generate thumbnails for all PDFs in a directory
+pdf_dir = Path('./documents')
+output_dir = Path('./thumbnails')
+output_dir.mkdir(exist_ok=True)
+
+for pdf_file in pdf_dir.glob('*.pdf'):
+    output_path = output_dir / f"{pdf_file.stem}.jpg"
+
+    result = client.convert_file(
+        input_path=str(pdf_file),
+        target_format='thumbnail',
+        output_path=str(output_path),
+        conversion_metadata={
+            'thumbnail_width': 300,
+            'thumbnail_crop': 'half'
+        }
+    )
+    print(f"Created: {output_path}")
+```
+
+### Thumbnail Notes
+
+- Output format is always **JPEG** (quality 90)
+- Only the **first page** of the PDF is rendered
+- Aspect ratio is **preserved automatically**
+- Maximum file size: **20 MB**
+- Supported input: PDF files only
 
 ## Examples
 

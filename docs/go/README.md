@@ -11,6 +11,8 @@ Official Go SDK for the Convertorio API. Convert images between 20+ formats with
 - ✅ Full error handling
 - ✅ Type-safe API with structs
 - ✅ Batch conversion support
+- ✅ PDF to Thumbnail conversion
+- ✅ AI-powered OCR text extraction
 
 ## Requirements
 
@@ -418,6 +420,199 @@ result, err := client.ConvertFile(convertorio.ConvertFileOptions{
     },
 })
 ```
+
+## PDF Thumbnails
+
+Generate JPG preview images from PDF documents. The thumbnail is rendered from the first page of the PDF.
+
+### Basic PDF Thumbnail
+
+```go
+package main
+
+import (
+    "fmt"
+    "log"
+
+    convertorio "github.com/SedeSoft/convertorio-sdk/libs/go"
+)
+
+func main() {
+    client := convertorio.NewClient(convertorio.ClientConfig{
+        APIKey: "your_api_key_here",
+    })
+
+    // Convert PDF first page to JPG thumbnail
+    result, err := client.ConvertFile(convertorio.ConvertFileOptions{
+        InputPath:    "./document.pdf",
+        TargetFormat: "thumbnail",
+        OutputPath:   "./preview.jpg",
+        ConversionMetadata: map[string]interface{}{
+            "thumbnail_width": 800, // Width in pixels (50-2000)
+        },
+    })
+
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    fmt.Printf("Thumbnail saved: %s\n", result.OutputPath)
+    fmt.Printf("Size: %d bytes\n", result.FileSize)
+}
+```
+
+### Thumbnail Options
+
+| Parameter | Type | Range | Default | Description |
+|-----------|------|-------|---------|-------------|
+| `thumbnail_width` | int | 50-2000 | 800 | Width in pixels |
+| `thumbnail_height` | int | 50-2000 | auto | Height (calculated automatically if not set) |
+| `thumbnail_crop` | string | see below | full | Portion of page to capture |
+
+### Crop Modes
+
+Control which portion of the PDF page to capture (from the top):
+
+| Value | Description |
+|-------|-------------|
+| `full` | Complete page - 100% (default) |
+| `half` | Top half - 50% |
+| `third` | Top third - 33% |
+| `quarter` | Top quarter - 25% |
+| `two-thirds` | Top two-thirds - 66% |
+
+### Thumbnail with Crop
+
+```go
+// Capture only the top half of the PDF page
+result, err := client.ConvertFile(convertorio.ConvertFileOptions{
+    InputPath:    "./document.pdf",
+    TargetFormat: "thumbnail",
+    OutputPath:   "./header_preview.jpg",
+    ConversionMetadata: map[string]interface{}{
+        "thumbnail_width": 600,
+        "thumbnail_crop":  "half", // Only top 50% of page
+    },
+})
+
+if err != nil {
+    log.Fatal(err)
+}
+
+fmt.Printf("Header thumbnail: %s\n", result.OutputPath)
+```
+
+### Thumbnail with Progress Events
+
+```go
+package main
+
+import (
+    "fmt"
+    "log"
+
+    convertorio "github.com/SedeSoft/convertorio-sdk/libs/go"
+)
+
+func main() {
+    client := convertorio.NewClient(convertorio.ClientConfig{
+        APIKey: "your_api_key_here",
+    })
+
+    // Set up progress callbacks
+    client.On("progress", func(data map[string]interface{}) {
+        fmt.Printf("Step: %v\n", data["step"])
+    })
+
+    client.On("complete", func(data map[string]interface{}) {
+        fmt.Printf("Done! Job: %v\n", data["job_id"])
+    })
+
+    client.On("error", func(data map[string]interface{}) {
+        fmt.Printf("Error: %v\n", data["error"])
+    })
+
+    // Convert with progress tracking
+    result, err := client.ConvertFile(convertorio.ConvertFileOptions{
+        InputPath:    "./report.pdf",
+        TargetFormat: "thumbnail",
+        ConversionMetadata: map[string]interface{}{
+            "thumbnail_width": 400,
+            "thumbnail_crop":  "third", // Just the header area
+        },
+    })
+
+    if err != nil {
+        log.Fatal(err)
+    }
+}
+```
+
+### Batch PDF Thumbnails
+
+```go
+package main
+
+import (
+    "fmt"
+    "log"
+    "os"
+    "path/filepath"
+    "strings"
+
+    convertorio "github.com/SedeSoft/convertorio-sdk/libs/go"
+)
+
+func main() {
+    client := convertorio.NewClient(convertorio.ClientConfig{
+        APIKey: "your_api_key_here",
+    })
+
+    // Generate thumbnails for all PDFs in a directory
+    pdfDir := "./documents"
+    outputDir := "./thumbnails"
+
+    // Create output directory if needed
+    if err := os.MkdirAll(outputDir, 0755); err != nil {
+        log.Fatal(err)
+    }
+
+    pdfFiles, err := filepath.Glob(pdfDir + "/*.pdf")
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    for _, pdfFile := range pdfFiles {
+        basename := strings.TrimSuffix(filepath.Base(pdfFile), ".pdf")
+        outputPath := filepath.Join(outputDir, basename+".jpg")
+
+        result, err := client.ConvertFile(convertorio.ConvertFileOptions{
+            InputPath:    pdfFile,
+            TargetFormat: "thumbnail",
+            OutputPath:   outputPath,
+            ConversionMetadata: map[string]interface{}{
+                "thumbnail_width": 300,
+                "thumbnail_crop":  "half",
+            },
+        })
+
+        if err != nil {
+            log.Printf("Error converting %s: %v\n", pdfFile, err)
+            continue
+        }
+
+        fmt.Printf("Created: %s\n", result.OutputPath)
+    }
+}
+```
+
+### Thumbnail Notes
+
+- Output format is always **JPEG** (quality 90)
+- Only the **first page** of the PDF is rendered
+- Aspect ratio is **preserved automatically**
+- Maximum file size: **20 MB**
+- Supported input: PDF files only
 
 ## Examples
 

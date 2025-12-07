@@ -13,6 +13,8 @@ Official Java SDK for [Convertorio](https://convertorio.com) - Simple and powerf
 - ✅ **No External Image Libraries** - Uses OkHttp and Gson only
 - ✅ **Automatic File Handling** - Upload and download handled automatically
 - ✅ **Supports Java 11+** - Compatible with modern Java versions
+- ✅ **PDF to Thumbnail** - Generate JPG previews from PDF documents
+- ✅ **AI-powered OCR** - Extract text from images using AI
 
 ## Supported Formats
 
@@ -238,6 +240,185 @@ Resize options:
 - `resize_height` - Target height in pixels (1-10000)
 - Specify both to force exact dimensions
 - Specify one to maintain aspect ratio
+
+#### PDF Thumbnails
+
+Generate JPG preview images from PDF documents. The thumbnail is rendered from the first page of the PDF.
+
+**Basic PDF Thumbnail:**
+
+```java
+import com.sedesoft.convertorio.*;
+import java.util.HashMap;
+import java.util.Map;
+
+public class PDFThumbnailExample {
+    public static void main(String[] args) {
+        try {
+            ConvertorioClient client = new ConvertorioClient(
+                ClientConfig.builder()
+                    .apiKey("your_api_key_here")
+                    .build()
+            );
+
+            // Configure thumbnail options
+            Map<String, Object> metadata = new HashMap<>();
+            metadata.put("thumbnail_width", 800);  // Width in pixels (50-2000)
+
+            // Convert PDF first page to JPG thumbnail
+            ConversionResult result = client.convertFile(
+                ConversionOptions.builder()
+                    .inputPath("./document.pdf")
+                    .targetFormat("thumbnail")
+                    .outputPath("./preview.jpg")
+                    .conversionMetadata(metadata)
+                    .build()
+            );
+
+            System.out.println("Thumbnail saved: " + result.getOutputPath());
+            System.out.println("Size: " + result.getFileSize() + " bytes");
+
+        } catch (ConvertorioException e) {
+            System.err.println("Error: " + e.getMessage());
+        }
+    }
+}
+```
+
+**Thumbnail Options:**
+
+| Parameter | Type | Range | Default | Description |
+|-----------|------|-------|---------|-------------|
+| `thumbnail_width` | int | 50-2000 | 800 | Width in pixels |
+| `thumbnail_height` | int | 50-2000 | auto | Height (calculated automatically if not set) |
+| `thumbnail_crop` | String | see below | full | Portion of page to capture |
+
+**Crop Modes:**
+
+Control which portion of the PDF page to capture (from the top):
+
+| Value | Description |
+|-------|-------------|
+| `full` | Complete page - 100% (default) |
+| `half` | Top half - 50% |
+| `third` | Top third - 33% |
+| `quarter` | Top quarter - 25% |
+| `two-thirds` | Top two-thirds - 66% |
+
+**Thumbnail with Crop:**
+
+```java
+Map<String, Object> metadata = new HashMap<>();
+metadata.put("thumbnail_width", 600);
+metadata.put("thumbnail_crop", "half");  // Only top 50% of page
+
+ConversionResult result = client.convertFile(
+    ConversionOptions.builder()
+        .inputPath("./document.pdf")
+        .targetFormat("thumbnail")
+        .outputPath("./header_preview.jpg")
+        .conversionMetadata(metadata)
+        .build()
+);
+
+System.out.println("Header thumbnail: " + result.getOutputPath());
+```
+
+**Thumbnail with Progress Events:**
+
+```java
+ConvertorioClient client = new ConvertorioClient(
+    ClientConfig.builder()
+        .apiKey("your_api_key_here")
+        .build()
+);
+
+// Set up progress callbacks
+client.on("progress", data -> {
+    System.out.println("Step: " + data.getString("step"));
+});
+
+client.on("complete", data -> {
+    System.out.println("Done! Job: " + data.getString("jobId"));
+});
+
+client.on("error", data -> {
+    System.err.println("Error: " + data.getString("error"));
+});
+
+// Convert with progress tracking
+Map<String, Object> metadata = new HashMap<>();
+metadata.put("thumbnail_width", 400);
+metadata.put("thumbnail_crop", "third");  // Just the header area
+
+ConversionResult result = client.convertFile(
+    ConversionOptions.builder()
+        .inputPath("./report.pdf")
+        .targetFormat("thumbnail")
+        .conversionMetadata(metadata)
+        .build()
+);
+```
+
+**Batch PDF Thumbnails:**
+
+```java
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
+public class BatchThumbnails {
+    public static void main(String[] args) {
+        ConvertorioClient client = new ConvertorioClient(
+            ClientConfig.builder()
+                .apiKey("your_api_key_here")
+                .build()
+        );
+
+        // Generate thumbnails for all PDFs in a directory
+        File pdfDir = new File("./documents");
+        File outputDir = new File("./thumbnails");
+        outputDir.mkdirs();
+
+        File[] pdfFiles = pdfDir.listFiles((dir, name) -> name.endsWith(".pdf"));
+
+        if (pdfFiles != null) {
+            for (File pdfFile : pdfFiles) {
+                try {
+                    String basename = pdfFile.getName().replace(".pdf", "");
+                    String outputPath = outputDir.getPath() + "/" + basename + ".jpg";
+
+                    Map<String, Object> metadata = new HashMap<>();
+                    metadata.put("thumbnail_width", 300);
+                    metadata.put("thumbnail_crop", "half");
+
+                    ConversionResult result = client.convertFile(
+                        ConversionOptions.builder()
+                            .inputPath(pdfFile.getPath())
+                            .targetFormat("thumbnail")
+                            .outputPath(outputPath)
+                            .conversionMetadata(metadata)
+                            .build()
+                    );
+
+                    System.out.println("Created: " + result.getOutputPath());
+
+                } catch (ConvertorioException e) {
+                    System.err.println("Error converting " + pdfFile.getName() + ": " + e.getMessage());
+                }
+            }
+        }
+    }
+}
+```
+
+**Thumbnail Notes:**
+
+- Output format is always **JPEG** (quality 90)
+- Only the **first page** of the PDF is rendered
+- Aspect ratio is **preserved automatically**
+- Maximum file size: **20 MB**
+- Supported input: PDF files only
 
 ### Account Management
 

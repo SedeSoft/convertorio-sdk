@@ -11,6 +11,8 @@ Official PHP SDK for the Convertorio API. Convert images between 20+ formats wit
 - ✅ PSR-4 autoloading
 - ✅ Batch conversion support
 - ✅ Full error handling
+- ✅ PDF to Thumbnail conversion
+- ✅ AI-powered OCR text extraction
 
 ## Requirements
 
@@ -432,6 +434,161 @@ $result = $client->convertFile(
 - Combine with aspect ratio for precise control
 - Quality parameter affects lossy formats (JPG, WebP, AVIF)
 - LANCZOS resampling ensures high-quality results
+
+## PDF Thumbnails
+
+Generate JPG preview images from PDF documents. The thumbnail is rendered from the first page of the PDF.
+
+### Basic PDF Thumbnail
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+use Convertorio\SDK\ConvertorioClient;
+
+$client = new ConvertorioClient('your_api_key_here');
+
+// Convert PDF first page to JPG thumbnail
+$result = $client->convertFile(
+    './document.pdf',
+    'thumbnail',
+    './preview.jpg',
+    ['thumbnail_width' => 800]  // Width in pixels (50-2000)
+);
+
+echo "Thumbnail saved: {$result['output_path']}\n";
+echo "Size: {$result['file_size']} bytes\n";
+```
+
+### Thumbnail Options
+
+| Parameter | Type | Range | Default | Description |
+|-----------|------|-------|---------|-------------|
+| `thumbnail_width` | int | 50-2000 | 800 | Width in pixels |
+| `thumbnail_height` | int | 50-2000 | auto | Height (calculated automatically if not set) |
+| `thumbnail_crop` | string | see below | full | Portion of page to capture |
+
+### Crop Modes
+
+Control which portion of the PDF page to capture (from the top):
+
+| Value | Description |
+|-------|-------------|
+| `full` | Complete page - 100% (default) |
+| `half` | Top half - 50% |
+| `third` | Top third - 33% |
+| `quarter` | Top quarter - 25% |
+| `two-thirds` | Top two-thirds - 66% |
+
+### Thumbnail with Crop
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+use Convertorio\SDK\ConvertorioClient;
+
+$client = new ConvertorioClient('your_api_key_here');
+
+// Capture only the top half of the PDF page
+$result = $client->convertFile(
+    './document.pdf',
+    'thumbnail',
+    './header_preview.jpg',
+    [
+        'thumbnail_width' => 600,
+        'thumbnail_crop' => 'half'  // Only top 50% of page
+    ]
+);
+
+echo "Header thumbnail: {$result['output_path']}\n";
+```
+
+### Thumbnail with Progress Events
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+use Convertorio\SDK\ConvertorioClient;
+
+$client = new ConvertorioClient('your_api_key_here');
+
+// Set up progress callbacks
+$client->on('progress', function($data) {
+    echo "Step: {$data['step']}\n";
+});
+
+$client->on('complete', function($data) {
+    echo "Done! Job: {$data['job_id']}\n";
+});
+
+$client->on('error', function($data) {
+    echo "Error: {$data['error']}\n";
+});
+
+// Convert with progress tracking
+$result = $client->convertFile(
+    './report.pdf',
+    'thumbnail',
+    null,
+    [
+        'thumbnail_width' => 400,
+        'thumbnail_crop' => 'third'  // Just the header area
+    ]
+);
+```
+
+### Batch PDF Thumbnails
+
+```php
+<?php
+
+require 'vendor/autoload.php';
+
+use Convertorio\SDK\ConvertorioClient;
+
+$client = new ConvertorioClient('your_api_key_here');
+
+// Generate thumbnails for all PDFs in a directory
+$pdfDir = './documents';
+$outputDir = './thumbnails';
+
+// Create output directory if needed
+if (!is_dir($outputDir)) {
+    mkdir($outputDir, 0755, true);
+}
+
+$pdfFiles = glob($pdfDir . '/*.pdf');
+
+foreach ($pdfFiles as $pdfFile) {
+    $basename = basename($pdfFile, '.pdf');
+    $outputPath = $outputDir . '/' . $basename . '.jpg';
+
+    $result = $client->convertFile(
+        $pdfFile,
+        'thumbnail',
+        $outputPath,
+        [
+            'thumbnail_width' => 300,
+            'thumbnail_crop' => 'half'
+        ]
+    );
+    echo "Created: {$outputPath}\n";
+}
+```
+
+### Thumbnail Notes
+
+- Output format is always **JPEG** (quality 90)
+- Only the **first page** of the PDF is rendered
+- Aspect ratio is **preserved automatically**
+- Maximum file size: **20 MB**
+- Supported input: PDF files only
 
 ## Examples
 

@@ -11,6 +11,8 @@ Official SDKs for the Convertorio API - Convert images between 20+ formats with 
 - ✅ Comprehensive error handling
 - ✅ TypeScript support
 - ✅ Well documented with examples
+- ✅ PDF to Thumbnail conversion
+- ✅ AI-powered OCR text extraction
 
 ## 📦 Supported Languages
 
@@ -423,6 +425,9 @@ Convert between 20+ image formats:
 - EPS
 - JXL (JPEG XL)
 
+**Special Conversions:**
+- Thumbnail (PDF to JPG preview)
+
 **✨ AI-Powered OCR:**
 - Extract text from any image format
 - Powered by advanced AI technology
@@ -571,6 +576,155 @@ Console.WriteLine($"Tokens used: {result.TokensUsed}");
 - 📊 **Table Extraction**: Convert tables in images to structured data
 
 For complete OCR documentation, see the language-specific README files.
+
+## 📄 PDF Thumbnails (NEW)
+
+Generate high-quality thumbnail images from PDF documents. Perfect for document previews, galleries, and file browsers.
+
+### Quick Thumbnail Example
+
+#### Node.js
+```javascript
+const result = await client.convertFile({
+    inputPath: './document.pdf',
+    targetFormat: 'thumbnail',
+    outputPath: './preview.jpg',
+    conversionMetadata: {
+        thumbnail_width: 800,
+        thumbnail_crop: 'half'  // Optional: capture top 50% of page
+    }
+});
+
+console.log(`Thumbnail created: ${result.outputPath}`);
+```
+
+#### Python
+```python
+result = client.convert_file(
+    input_path='./document.pdf',
+    target_format='thumbnail',
+    output_path='./preview.jpg',
+    conversion_metadata={
+        'thumbnail_width': 800,
+        'thumbnail_crop': 'half'  # Optional: capture top 50% of page
+    }
+)
+
+print(f"Thumbnail created: {result['output_path']}")
+```
+
+#### PHP
+```php
+$result = $client->convertFile(
+    './document.pdf',
+    'thumbnail',
+    './preview.jpg',
+    [
+        'thumbnail_width' => 800,
+        'thumbnail_crop' => 'half'  // Optional: capture top 50% of page
+    ]
+);
+
+echo "Thumbnail created: " . $result['output_path'];
+```
+
+#### Ruby
+```ruby
+result = client.convert_file(
+  input_path: './document.pdf',
+  target_format: 'thumbnail',
+  output_path: './preview.jpg',
+  conversion_metadata: {
+    thumbnail_width: 800,
+    thumbnail_crop: 'half'  # Optional: capture top 50% of page
+  }
+)
+
+puts "Thumbnail created: #{result[:output_path]}"
+```
+
+#### Go
+```go
+result, err := client.ConvertFile(convertorio.ConvertFileOptions{
+    InputPath:    "./document.pdf",
+    TargetFormat: "thumbnail",
+    OutputPath:   "./preview.jpg",
+    ConversionMetadata: map[string]interface{}{
+        "thumbnail_width": 800,
+        "thumbnail_crop":  "half",  // Optional: capture top 50% of page
+    },
+})
+
+fmt.Printf("Thumbnail created: %s\n", result.OutputPath)
+```
+
+#### Java
+```java
+ConversionResult result = client.convertFile(
+    ConversionOptions.builder()
+        .inputPath("./document.pdf")
+        .targetFormat("thumbnail")
+        .outputPath("./preview.jpg")
+        .conversionMetadata(Map.of(
+            "thumbnail_width", 800,
+            "thumbnail_crop", "half"  // Optional: capture top 50% of page
+        ))
+        .build()
+);
+
+System.out.println("Thumbnail created: " + result.getOutputPath());
+```
+
+#### .NET/C#
+```csharp
+var result = await client.ConvertFileAsync(new ConversionOptions
+{
+    InputPath = "./document.pdf",
+    TargetFormat = "thumbnail",
+    OutputPath = "./preview.jpg",
+    ConversionMetadata = new ConversionMetadata
+    {
+        ThumbnailWidth = 800,
+        ThumbnailCrop = "half"  // Optional: capture top 50% of page
+    }
+});
+
+Console.WriteLine($"Thumbnail created: {result.OutputPath}");
+```
+
+### Thumbnail Options
+
+| Option | Type | Range | Default | Description |
+|--------|------|-------|---------|-------------|
+| `thumbnail_width` | int | 50-2000 | 800 | Target width in pixels |
+| `thumbnail_height` | int | 50-2000 | auto | Target height (maintains aspect ratio if not specified) |
+| `thumbnail_crop` | string | see below | `full` | Portion of page to capture |
+
+### Crop Values
+
+| Value | Description |
+|-------|-------------|
+| `full` | Full page (default) |
+| `half` | Top 50% of page |
+| `third` | Top 33% of page |
+| `quarter` | Top 25% of page |
+| `two-thirds` | Top 66% of page |
+
+### Thumbnail Features
+
+- **High Quality**: Renders PDF at optimal resolution for sharp thumbnails
+- **First Page**: Automatically extracts the first page of multi-page PDFs
+- **Aspect Ratio**: Maintains document aspect ratio automatically
+- **Crop Control**: Capture full page or just the top portion for previews
+- **JPEG Output**: Optimized JPEG output at 90% quality
+
+### Use Cases
+
+- 📁 **File Browsers**: Show document previews in file managers
+- 📚 **Document Libraries**: Create gallery views of PDF collections
+- 📧 **Email Attachments**: Generate previews for attached documents
+- 🔍 **Search Results**: Display document thumbnails in search interfaces
+- 📱 **Mobile Apps**: Efficient document previews for mobile devices
 
 ## 📊 API Limits
 

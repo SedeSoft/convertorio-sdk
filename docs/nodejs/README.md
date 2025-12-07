@@ -11,6 +11,8 @@ Official Node.js SDK for the Convertorio API. Convert images between 20+ formats
 - ✅ TypeScript definitions included
 - ✅ Batch conversion support
 - ✅ Full error handling
+- ✅ PDF to Thumbnail conversion
+- ✅ AI-powered OCR text extraction
 
 ## Installation
 
@@ -428,6 +430,162 @@ const result = await client.convertFile({
 - Combine with aspect ratio for precise control
 - Quality parameter affects lossy formats (JPG, WebP, AVIF)
 - LANCZOS resampling ensures high-quality results
+
+## PDF Thumbnails
+
+Generate JPG preview images from PDF documents. The thumbnail is rendered from the first page of the PDF.
+
+### Basic PDF Thumbnail
+
+```javascript
+const ConvertorioClient = require('convertorio-sdk');
+
+const client = new ConvertorioClient({
+    apiKey: 'your_api_key_here'
+});
+
+// Convert PDF first page to JPG thumbnail
+const result = await client.convertFile({
+    inputPath: './document.pdf',
+    targetFormat: 'thumbnail',
+    outputPath: './preview.jpg',
+    conversionMetadata: {
+        thumbnail_width: 800  // Width in pixels (50-2000)
+    }
+});
+
+console.log('Thumbnail saved:', result.outputPath);
+console.log('Size:', result.fileSize, 'bytes');
+```
+
+### Thumbnail Options
+
+| Parameter | Type | Range | Default | Description |
+|-----------|------|-------|---------|-------------|
+| `thumbnail_width` | number | 50-2000 | 800 | Width in pixels |
+| `thumbnail_height` | number | 50-2000 | auto | Height (calculated automatically if not set) |
+| `thumbnail_crop` | string | see below | full | Portion of page to capture |
+
+### Crop Modes
+
+Control which portion of the PDF page to capture (from the top):
+
+| Value | Description |
+|-------|-------------|
+| `full` | Complete page - 100% (default) |
+| `half` | Top half - 50% |
+| `third` | Top third - 33% |
+| `quarter` | Top quarter - 25% |
+| `two-thirds` | Top two-thirds - 66% |
+
+### Thumbnail with Crop
+
+```javascript
+// Capture only the top half of the PDF page
+const result = await client.convertFile({
+    inputPath: './document.pdf',
+    targetFormat: 'thumbnail',
+    outputPath: './header_preview.jpg',
+    conversionMetadata: {
+        thumbnail_width: 600,
+        thumbnail_crop: 'half'  // Only top 50% of page
+    }
+});
+
+console.log('Header thumbnail:', result.outputPath);
+```
+
+### Thumbnail with Progress Events
+
+```javascript
+const client = new ConvertorioClient({
+    apiKey: 'your_api_key_here'
+});
+
+// Set up progress callbacks
+client.on('progress', (data) => console.log(`Step: ${data.step}`));
+client.on('complete', (data) => console.log(`Done! Job: ${data.jobId}`));
+client.on('error', (data) => console.log(`Error: ${data.error}`));
+
+// Convert with progress tracking
+const result = await client.convertFile({
+    inputPath: './report.pdf',
+    targetFormat: 'thumbnail',
+    conversionMetadata: {
+        thumbnail_width: 400,
+        thumbnail_crop: 'third'  // Just the header area
+    }
+});
+```
+
+### Batch PDF Thumbnails
+
+```javascript
+const fs = require('fs');
+const path = require('path');
+
+const client = new ConvertorioClient({
+    apiKey: 'your_api_key_here'
+});
+
+// Generate thumbnails for all PDFs in a directory
+const pdfDir = './documents';
+const outputDir = './thumbnails';
+
+// Create output directory if needed
+if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir, { recursive: true });
+}
+
+const pdfFiles = fs.readdirSync(pdfDir).filter(f => f.endsWith('.pdf'));
+
+for (const pdfFile of pdfFiles) {
+    const inputPath = path.join(pdfDir, pdfFile);
+    const outputPath = path.join(outputDir, pdfFile.replace('.pdf', '.jpg'));
+
+    const result = await client.convertFile({
+        inputPath,
+        targetFormat: 'thumbnail',
+        outputPath,
+        conversionMetadata: {
+            thumbnail_width: 300,
+            thumbnail_crop: 'half'
+        }
+    });
+    console.log('Created:', outputPath);
+}
+```
+
+### TypeScript Thumbnail Example
+
+```typescript
+import ConvertorioClient, { ConversionOptions, ConversionResult } from 'convertorio-sdk';
+
+const client = new ConvertorioClient({
+    apiKey: 'your_api_key_here'
+});
+
+const options: ConversionOptions = {
+    inputPath: './document.pdf',
+    targetFormat: 'thumbnail',
+    outputPath: './preview.jpg',
+    conversionMetadata: {
+        thumbnail_width: 800,
+        thumbnail_crop: 'half'
+    }
+};
+
+const result: ConversionResult = await client.convertFile(options);
+console.log('Thumbnail:', result.outputPath);
+```
+
+### Thumbnail Notes
+
+- Output format is always **JPEG** (quality 90)
+- Only the **first page** of the PDF is rendered
+- Aspect ratio is **preserved automatically**
+- Maximum file size: **20 MB**
+- Supported input: PDF files only
 
 ## Examples
 
