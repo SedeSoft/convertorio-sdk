@@ -1,0 +1,41 @@
+# Source files
+nodes/
+credentials/
+icons/
+
+# Config files
+tsconfig.json
+.prettierrc.js
+eslint.config.mjs
+
+# Dev files
+*.ts
+!*.d.ts
+
+# Unnecessary dist files
+dist/node_modules/
+
+# Development
+node_modules/
+.git/
+.github/
+.vscode/
+.idea/
+
+# Tests
+__tests__/
+*.test.ts
+*.spec.ts
+coverage/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local

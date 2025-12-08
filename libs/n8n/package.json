@@ -1,0 +1,72 @@
+{
+  "name": "n8n-nodes-convertorio",
+  "version": "1.0.0",
+  "description": "n8n community node for Convertorio - Convert images between 20+ formats, generate PDF thumbnails, and extract text with AI-powered OCR",
+  "keywords": [
+    "n8n",
+    "n8n-community-node-package",
+    "image-conversion",
+    "pdf-thumbnail",
+    "ocr",
+    "convertorio",
+    "image-processing",
+    "file-conversion",
+    "webp",
+    "avif",
+    "heic",
+    "jpg",
+    "png"
+  ],
+  "license": "MIT",
+  "homepage": "https://convertorio.com",
+  "author": {
+    "name": "SedeSoft",
+    "email": "support@convertorio.com",
+    "url": "https://convertorio.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SedeSoft/n8n-nodes-convertorio.git"
+  },
+  "engines": {
+    "node": ">=18.10",
+    "npm": ">=9.0.0"
+  },
+  "main": "dist/nodes/Convertorio/Convertorio.node.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "npm run build:node",
+    "build:node": "n8n-node build",
+    "watch": "n8n-node build --watch",
+    "dev": "n8n-node dev",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint nodes credentials",
+    "lint:fix": "eslint nodes credentials --fix",
+    "prepublishOnly": "npm run build"
+  },
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "strict": true,
+    "credentials": [
+      "dist/credentials/ConvertorioApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/Convertorio/Convertorio.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@n8n/node-cli": "^0.1.0",
+    "@types/node": "^22.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint": "^9.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.6.0"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  }
+}
