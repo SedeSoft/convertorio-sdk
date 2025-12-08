@@ -25,6 +25,7 @@ Official SDKs for the Convertorio API - Convert images between 20+ formats with 
 | **Java** | ✅ Available | [libs/java](./libs/java/README.md) | `com.sedesoft:convertorio-sdk` |
 | **Ruby** | ✅ Available | [libs/ruby](./libs/ruby/README.md) | `convertorio-sdk` |
 | **.NET/C#** | ✅ Available | [libs/dotnet](./libs/dotnet/README.md) | `Convertorio.SDK` |
+| **n8n** | ✅ Available | [docs/n8n](./docs/n8n/README.md) | `n8n-nodes-convertorio` |
 
 ## 🚀 Quick Start
 
