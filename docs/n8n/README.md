@@ -482,7 +482,7 @@ For production workflows, consider adding retry logic:
 
 ### Support
 
-- **Issues & Bug Reports:** [GitHub Issues](https://github.com/SedeSoft/n8n-nodes-convertorio/issues)
+- **Issues & Bug Reports:** [GitHub Issues](https://github.com/SedeSoft/convertorio-sdk/issues)
 - **Email Support:** [support@convertorio.com](mailto:support@convertorio.com)
 - **n8n Community:** [n8n Community Forum](https://community.n8n.io/)
 
