@@ -1,7 +1,7 @@
 {
   "name": "n8n-nodes-convertorio",
-  "version": "1.1.0",
-  "description": "n8n community node for Convertorio - Convert images between 20+ formats, generate PDF thumbnails, convert PDFs to images, and extract text with AI-powered OCR",
+  "version": "1.2.0",
+  "description": "n8n community node for Convertorio - Convert images between 20+ formats, generate PDF thumbnails, and extract text with AI-powered OCR",
   "keywords": [
     "n8n",
     "n8n-community-node-package",
@@ -27,7 +27,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/SedeSoft/n8n-nodes-convertorio.git"
+    "url": "https://github.com/SedeSoft/convertorio-sdk.git",
+    "directory": "libs/n8n"
+  },
+  "bugs": {
+    "url": "https://github.com/SedeSoft/convertorio-sdk/issues"
   },
   "engines": {
     "node": ">=18.10",
