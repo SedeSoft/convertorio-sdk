@@ -51,6 +51,12 @@ export class Convertorio implements INodeType {
 						action: 'Generate a JPG thumbnail from a PDF document',
 					},
 					{
+						name: 'PDF to Images',
+						value: 'pdfToImages',
+						description: 'Convert PDF pages to JPG images (one per page)',
+						action: 'Convert PDF pages to JPG images',
+					},
+					{
 						name: 'OCR (Extract Text)',
 						value: 'ocr',
 						description: 'Extract text from an image using AI-powered OCR',
@@ -77,7 +83,7 @@ export class Convertorio implements INodeType {
 				required: true,
 				displayOptions: {
 					show: {
-						operation: ['convertImage', 'pdfThumbnail', 'ocr'],
+						operation: ['convertImage', 'pdfThumbnail', 'pdfToImages', 'ocr'],
 					},
 				},
 				description: 'Name of the binary property containing the file to convert',
@@ -261,6 +267,58 @@ export class Convertorio implements INodeType {
 			},
 
 			// ============================================
+			// PDF to Images Operation
+			// ============================================
+			{
+				displayName: 'Image Width',
+				name: 'imagesWidth',
+				type: 'number',
+				displayOptions: {
+					show: {
+						operation: ['pdfToImages'],
+					},
+				},
+				typeOptions: {
+					minValue: 50,
+					maxValue: 4000,
+				},
+				default: 1200,
+				description: 'Width of each output image in pixels (50-4000)',
+			},
+			{
+				displayName: 'Image Quality',
+				name: 'imagesQuality',
+				type: 'number',
+				displayOptions: {
+					show: {
+						operation: ['pdfToImages'],
+					},
+				},
+				typeOptions: {
+					minValue: 1,
+					maxValue: 100,
+				},
+				default: 90,
+				description: 'JPEG quality (1-100). Higher values mean better quality but larger files.',
+			},
+			{
+				displayName: 'DPI',
+				name: 'imagesDpi',
+				type: 'number',
+				displayOptions: {
+					show: {
+						operation: ['pdfToImages'],
+					},
+				},
+				typeOptions: {
+					minValue: 72,
+					maxValue: 300,
+				},
+				default: 150,
+				description: 'DPI for rendering PDF pages (72-300). Higher values produce sharper images.',
+			},
+
+			// ============================================
 			// OCR Operation
 			// ============================================
 			{
@@ -290,10 +348,10 @@ export class Convertorio implements INodeType {
 				default: 'data',
 				displayOptions: {
 					show: {
-						operation: ['convertImage', 'pdfThumbnail'],
+						operation: ['convertImage', 'pdfThumbnail', 'pdfToImages'],
 					},
 				},
-				description: 'Name of the binary property to store the converted file',
+				description: 'Name of the binary property to store the converted file(s). For PDF to Images, multiple binary properties will be created (data_1, data_2, etc.)',
 			},
 		],
 	};
@@ -322,7 +380,7 @@ export class Convertorio implements INodeType {
 						json: response,
 						pairedItem: { item: i },
 					});
-				} else if (operation === 'convertImage' || operation === 'pdfThumbnail' || operation === 'ocr') {
+				} else if (operation === 'convertImage' || operation === 'pdfThumbnail' || operation === 'pdfToImages' || operation === 'ocr') {
 					// File conversion operations
 					const binaryPropertyName = this.getNodeParameter('binaryPropertyName', i) as string;
 					const binaryData = this.helpers.assertBinaryData(i, binaryPropertyName);
@@ -378,6 +436,15 @@ export class Convertorio implements INodeType {
 						if (thumbnailCrop !== 'full') {
 							conversionMetadata.thumbnail_crop = thumbnailCrop;
 						}
+					} else if (operation === 'pdfToImages') {
+						targetFormat = 'images';
+						const imagesWidth = this.getNodeParameter('imagesWidth', i, 1200) as number;
+						const imagesQuality = this.getNodeParameter('imagesQuality', i, 90) as number;
+						const imagesDpi = this.getNodeParameter('imagesDpi', i, 150) as number;
+
+						conversionMetadata.images_width = imagesWidth;
+						conversionMetadata.images_quality = imagesQuality;
+						conversionMetadata.images_dpi = imagesDpi;
 					} else {
 						// OCR
 						targetFormat = 'ocr';
@@ -520,6 +587,48 @@ export class Convertorio implements INodeType {
 							},
 							pairedItem: { item: i },
 						});
+					} else if (operation === 'pdfToImages' && jobResult.download_urls && Array.isArray(jobResult.download_urls)) {
+						// For PDF to Images, download all files and return multiple items
+						const outputBinaryPropertyName = this.getNodeParameter(
+							'outputBinaryPropertyName',
+							i,
+							'data',
+						) as string;
+
+						// Download each page as a separate output item
+						for (const fileInfo of jobResult.download_urls) {
+							const convertedFileResponse = await this.helpers.httpRequest({
+								method: 'GET' as IHttpRequestMethods,
+								url: fileInfo.download_url,
+								encoding: 'arraybuffer',
+								returnFullResponse: true,
+							});
+
+							const newBinaryData: IBinaryData = await this.helpers.prepareBinaryData(
+								Buffer.from(convertedFileResponse.body as Buffer),
+								fileInfo.filename,
+								'image/jpeg',
+							);
+
+							returnData.push({
+								json: {
+									success: true,
+									jobId: job_id,
+									sourceFormat: fileExtension,
+									targetFormat: 'images',
+									pageNumber: fileInfo.page_number,
+									totalPages: jobResult.download_urls.length,
+									width: fileInfo.width,
+									height: fileInfo.height,
+									fileSize: fileInfo.file_size,
+									processingTime: jobResult.processing_time_ms,
+								},
+								binary: {
+									[outputBinaryPropertyName]: newBinaryData,
+								},
+								pairedItem: { item: i },
+							});
+						}
 					} else {
 						// For image/PDF conversions, download the file
 						const outputBinaryPropertyName = this.getNodeParameter(

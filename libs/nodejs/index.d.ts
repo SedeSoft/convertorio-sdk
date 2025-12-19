@@ -12,6 +12,10 @@ export interface ConversionMetadata {
     icon_size?: 16 | 32 | 48 | 64 | 128 | 256;
     resize_width?: number;
     resize_height?: number;
+    // PDF to images options
+    images_width?: number;
+    images_quality?: number;
+    images_dpi?: number;
 }
 
 export interface ConversionOptions {
@@ -19,6 +23,21 @@ export interface ConversionOptions {
     targetFormat: string;
     outputPath?: string;
     conversionMetadata?: ConversionMetadata;
+}
+
+export interface PdfToImagesOptions {
+    inputPath: string;
+    outputDir?: string;
+    conversionMetadata?: ConversionMetadata;
+}
+
+export interface OutputFile {
+    path: string;
+    filename: string;
+    pageNumber: number;
+    width?: number;
+    height?: number;
+    fileSize: number;
 }
 
 export interface ConversionResult {
@@ -31,6 +50,26 @@ export interface ConversionResult {
     fileSize: number;
     processingTime: number;
     downloadUrl: string;
+}
+
+export interface PdfToImagesResult {
+    success: boolean;
+    jobId: string;
+    inputPath: string;
+    outputDir: string;
+    sourceFormat: string;
+    targetFormat: 'images';
+    outputFiles: OutputFile[];
+    outputFileCount: number;
+    totalSize: number;
+    processingTime: number;
+}
+
+export interface FileDownloadedEvent {
+    jobId: string;
+    filename: string;
+    pageNumber: number;
+    totalPages: number;
 }
 
 export interface ProgressEvent {
@@ -98,6 +137,7 @@ export default class ConvertorioClient extends EventEmitter {
     constructor(config: ConvertorioConfig);
 
     convertFile(options: ConversionOptions): Promise<ConversionResult>;
+    convertPdfToImages(options: PdfToImagesOptions): Promise<PdfToImagesResult>;
     getAccount(): Promise<AccountInfo>;
     listJobs(options?: ListJobsOptions): Promise<Job[]>;
     getJob(jobId: string): Promise<Job>;
@@ -105,6 +145,7 @@ export default class ConvertorioClient extends EventEmitter {
     on(event: 'start', listener: (data: StartEvent) => void): this;
     on(event: 'progress', listener: (data: ProgressEvent) => void): this;
     on(event: 'status', listener: (data: StatusEvent) => void): this;
-    on(event: 'complete', listener: (data: ConversionResult) => void): this;
+    on(event: 'complete', listener: (data: ConversionResult | PdfToImagesResult) => void): this;
     on(event: 'error', listener: (data: ErrorEvent) => void): this;
+    on(event: 'file-downloaded', listener: (data: FileDownloadedEvent) => void): this;
 }

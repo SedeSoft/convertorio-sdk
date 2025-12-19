@@ -135,3 +135,5 @@ deploy-*.sh
 .tmp/
 temp/
 tmp/
+
+test/nodejs/output-images/

@@ -314,6 +314,188 @@ class ConvertorioClient extends EventEmitter {
         }
         return response.data.job;
     }
+
+    /**
+     * Convert a PDF file to multiple JPG images (one per page)
+     * @param {Object} options - Conversion options
+     * @param {string} options.inputPath - Path to the input PDF file
+     * @param {string} [options.outputDir] - Output directory for images (defaults to same directory as input)
+     * @param {Object} [options.conversionMetadata] - Advanced conversion options
+     * @param {number} [options.conversionMetadata.images_width] - Target width in pixels (50-4000, default 1200)
+     * @param {number} [options.conversionMetadata.images_quality] - JPEG quality 1-100 (default 90)
+     * @param {number} [options.conversionMetadata.images_dpi] - DPI for rendering (72-300, default 150)
+     * @returns {Promise<Object>} Conversion result with array of output files
+     */
+    async convertPdfToImages(options) {
+        const { inputPath, outputDir, conversionMetadata } = options;
+
+        if (!inputPath) {
+            throw new Error('inputPath is required');
+        }
+
+        // Validate input file exists
+        if (!fs.existsSync(inputPath)) {
+            throw new Error(`Input file not found: ${inputPath}`);
+        }
+
+        const fileStats = fs.statSync(inputPath);
+        const fileName = path.basename(inputPath);
+        const sourceFormat = path.extname(inputPath).substring(1).toLowerCase();
+
+        if (sourceFormat !== 'pdf') {
+            throw new Error('Input file must be a PDF');
+        }
+
+        this.emit('start', { fileName, sourceFormat, targetFormat: 'images' });
+
+        try {
+            // Step 1: Request upload URL
+            this.emit('progress', {
+                step: 'requesting-upload-url',
+                message: 'Requesting upload URL from server...'
+            });
+
+            const requestBody = {
+                filename: fileName,
+                source_format: sourceFormat,
+                target_format: 'images',
+                file_size: fileStats.size
+            };
+
+            // Add conversion metadata if provided
+            if (conversionMetadata && Object.keys(conversionMetadata).length > 0) {
+                requestBody.conversion_metadata = conversionMetadata;
+            }
+
+            const uploadRequest = await this.client.post('/v1/convert/upload-url', requestBody);
+
+            if (!uploadRequest.data.success) {
+                throw new Error(uploadRequest.data.error || 'Failed to get upload URL');
+            }
+
+            const { job_id, upload_url } = uploadRequest.data;
+
+            this.emit('progress', {
+                step: 'uploading',
+                message: 'Uploading file to cloud storage...',
+                jobId: job_id
+            });
+
+            // Step 2: Upload file to S3
+            const fileBuffer = fs.readFileSync(inputPath);
+            await axios.put(upload_url, fileBuffer, {
+                headers: {
+                    'Content-Type': 'application/pdf'
+                }
+            });
+
+            this.emit('progress', {
+                step: 'confirming',
+                message: 'Confirming upload and queuing conversion...',
+                jobId: job_id
+            });
+
+            // Step 3: Confirm upload and queue conversion
+            const confirmRequest = await this.client.post('/v1/convert/confirm', {
+                job_id
+            });
+
+            if (!confirmRequest.data.success) {
+                throw new Error(confirmRequest.data.error || 'Failed to confirm upload');
+            }
+
+            this.emit('progress', {
+                step: 'converting',
+                message: 'Converting PDF to images...',
+                jobId: job_id,
+                status: confirmRequest.data.status
+            });
+
+            // Step 4: Poll for completion
+            const result = await this._pollJobStatus(job_id);
+
+            this.emit('progress', {
+                step: 'downloading',
+                message: 'Downloading converted images...',
+                jobId: job_id
+            });
+
+            // Step 5: Download all converted images
+            const finalOutputDir = outputDir || path.dirname(inputPath);
+
+            // Ensure output directory exists
+            if (!fs.existsSync(finalOutputDir)) {
+                fs.mkdirSync(finalOutputDir, { recursive: true });
+            }
+
+            const outputFiles = [];
+
+            // Check if we have multiple download URLs
+            if (result.download_urls && Array.isArray(result.download_urls)) {
+                // Download each file
+                for (const fileInfo of result.download_urls) {
+                    const outputFilePath = path.join(finalOutputDir, fileInfo.filename);
+                    await this._downloadFile(fileInfo.download_url, outputFilePath);
+
+                    outputFiles.push({
+                        path: outputFilePath,
+                        filename: fileInfo.filename,
+                        pageNumber: fileInfo.page_number,
+                        width: fileInfo.width,
+                        height: fileInfo.height,
+                        fileSize: fs.statSync(outputFilePath).size
+                    });
+
+                    this.emit('file-downloaded', {
+                        jobId: job_id,
+                        filename: fileInfo.filename,
+                        pageNumber: fileInfo.page_number,
+                        totalPages: result.download_urls.length
+                    });
+                }
+            } else {
+                // Fallback: single file download
+                const baseName = path.basename(inputPath, path.extname(inputPath));
+                const outputFilePath = path.join(finalOutputDir, `${baseName}_page_001.jpg`);
+                await this._downloadFile(result.download_url, outputFilePath);
+
+                outputFiles.push({
+                    path: outputFilePath,
+                    filename: path.basename(outputFilePath),
+                    pageNumber: 1,
+                    fileSize: fs.statSync(outputFilePath).size
+                });
+            }
+
+            const conversionResult = {
+                success: true,
+                jobId: job_id,
+                inputPath,
+                outputDir: finalOutputDir,
+                sourceFormat,
+                targetFormat: 'images',
+                outputFiles,
+                outputFileCount: outputFiles.length,
+                totalSize: outputFiles.reduce((sum, f) => sum + f.fileSize, 0),
+                processingTime: result.processing_time_ms
+            };
+
+            this.emit('complete', conversionResult);
+
+            return conversionResult;
+
+        } catch (error) {
+            const errorDetails = {
+                success: false,
+                error: error.message,
+                inputPath,
+                targetFormat: 'images'
+            };
+
+            this.emit('error', errorDetails);
+            throw error;
+        }
+    }
 }
 
 module.exports = ConvertorioClient;

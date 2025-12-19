@@ -1,12 +1,13 @@
 {
   "name": "n8n-nodes-convertorio",
-  "version": "1.0.0",
-  "description": "n8n community node for Convertorio - Convert images between 20+ formats, generate PDF thumbnails, and extract text with AI-powered OCR",
+  "version": "1.1.0",
+  "description": "n8n community node for Convertorio - Convert images between 20+ formats, generate PDF thumbnails, convert PDFs to images, and extract text with AI-powered OCR",
   "keywords": [
     "n8n",
     "n8n-community-node-package",
     "image-conversion",
     "pdf-thumbnail",
+    "pdf-to-images",
     "ocr",
     "convertorio",
     "image-processing",

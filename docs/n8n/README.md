@@ -6,6 +6,7 @@ Official n8n community node for [Convertorio](https://convertorio.com) - Convert
 
 - **Image Conversion**: Convert between JPG, PNG, WebP, AVIF, HEIC, GIF, BMP, TIFF, ICO, JXL
 - **PDF Thumbnails**: Generate high-quality JPG previews from PDF documents
+- **PDF to Images**: Convert all PDF pages to JPG images (one per page)
 - **AI-powered OCR**: Extract text from images using advanced AI technology
 - **Resize & Crop**: Resize images with custom dimensions and aspect ratios
 - **Quality Control**: Set compression quality for lossy formats
@@ -83,6 +84,36 @@ Generate a JPG thumbnail from the first page of a PDF document.
 | quarter | Top quarter (25%) |
 | two-thirds | Top two-thirds (66%) |
 
+### PDF to Images
+
+Convert all pages of a PDF document to JPG images. Each page becomes a separate output item with its own binary data.
+
+**Input:**
+- Binary data containing a PDF file
+
+**Parameters:**
+| Parameter | Description | Default |
+|-----------|-------------|---------|
+| Image Width | Width of each image in pixels (50-4000) | 1200 |
+| Image Quality | JPEG quality 1-100 | 90 |
+| DPI | Rendering DPI (72-300) | 150 |
+
+**Output:**
+Returns multiple items, one per page, each with:
+```json
+{
+  "success": true,
+  "jobId": "abc123",
+  "pageNumber": 1,
+  "totalPages": 5,
+  "width": 1200,
+  "height": 1697,
+  "fileSize": 245620
+}
+```
+
+Each item also includes binary data with the JPG image.
+
 ### OCR (Extract Text)
 
 Extract text from images using AI-powered optical character recognition.
@@ -140,6 +171,18 @@ Retrieve account information including points balance.
                      thumbnailCrop: half
 ```
 
+### Convert PDF to Images
+
+```
+[Read Binary File] → [Convertorio: PDF to Images] → [Loop Over Items] → [Write Binary File]
+                           ↓                                                    ↓
+                     imagesWidth: 1200                               Save each page as JPG
+                     imagesQuality: 90
+                     imagesDpi: 150
+```
+
+This operation returns multiple items (one per page), so you can use Loop Over Items to process each page individually.
+
 ### Batch Image Conversion
 
 ```
@@ -164,6 +207,7 @@ Conversions consume points:
 |--------|--------|
 | Image Conversion | 1-3 |
 | PDF Thumbnail | 2 |
+| PDF to Images | 2 per page |
 | OCR | 5 |
 
 Purchase points at [convertorio.com/billing](https://convertorio.com/billing).

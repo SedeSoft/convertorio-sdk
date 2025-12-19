@@ -69,6 +69,64 @@ const client = new ConvertorioClient({
 
 Convert an image file from one format to another.
 
+### `convertPdfToImages(options)`
+
+Convert a PDF file to multiple JPG images (one per page).
+
+**Parameters:**
+- `options.inputPath` (string, required): Path to the input PDF file
+- `options.outputDir` (string, optional): Output directory for images (defaults to same directory as input)
+- `options.conversionMetadata` (object, optional): Advanced conversion options
+  - `images_width` (number): Target width in pixels (50-4000, default 1200)
+  - `images_quality` (number): JPEG quality 1-100 (default 90)
+  - `images_dpi` (number): DPI for rendering (72-300, default 150)
+
+**Returns:** Promise<PdfToImagesResult>
+
+**Example:**
+
+```javascript
+const result = await client.convertPdfToImages({
+    inputPath: './document.pdf',
+    outputDir: './pages',
+    conversionMetadata: {
+        images_width: 1200,
+        images_quality: 90,
+        images_dpi: 150
+    }
+});
+
+console.log(result);
+// {
+//   success: true,
+//   jobId: 'abc-123-def',
+//   inputPath: './document.pdf',
+//   outputDir: './pages',
+//   sourceFormat: 'pdf',
+//   targetFormat: 'images',
+//   outputFiles: [
+//     { path: './pages/document_page_001.jpg', filename: 'document_page_001.jpg', pageNumber: 1, width: 1200, height: 1697, fileSize: 245620 },
+//     { path: './pages/document_page_002.jpg', filename: 'document_page_002.jpg', pageNumber: 2, width: 1200, height: 1697, fileSize: 189420 },
+//     ...
+//   ],
+//   outputFileCount: 5,
+//   totalSize: 1245620,
+//   processingTime: 3250
+// }
+```
+
+**With Progress Events:**
+
+```javascript
+client.on('file-downloaded', (data) => {
+    console.log(`Downloaded page ${data.pageNumber}/${data.totalPages}: ${data.filename}`);
+});
+
+const result = await client.convertPdfToImages({
+    inputPath: './document.pdf'
+});
+```
+
 **Parameters:**
 - `options.inputPath` (string, required): Path to the input image file
 - `options.targetFormat` (string, required): Target format (jpg, png, webp, avif, gif, bmp, tiff, ico, heic, etc.)
